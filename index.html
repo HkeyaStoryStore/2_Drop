@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>STORY — THE SETS | HKEYA THE BRAND</title>
+    <link rel="icon" type="image/png" href="drop.png">
+    <link rel="apple-touch-icon" href="drop.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#0b0d10',
+                            dark: '#101318',
+                            gray: '#171b21',
+                            mid: '#242a33',
+                            accent: '#E3B76B',
+                            accentDark: '#B8913F',
+                            accentLight: '#F0CB8A',
+                            bone: '#ECEFF1',
+                            muted: '#8A94A0',
+                            faint: '#4A5360',
+                        }
+                    },
+                    fontFamily: {
+                        grotesk: ['Space Grotesk', 'sans-serif']
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box }
+        input[type=checkbox], input[type=radio] { accent-color: #E3B76B }
+        body { font-family: 'Space Grotesk', sans-serif; background: #0b0d10; color: #ECEFF1; overflow-x: hidden }
+        ::selection { background: rgba(227,183,107, .35); color: #0b0d10 }
+        ::-webkit-scrollbar { width: 6px }
+        ::-webkit-scrollbar-track { background: #0b0d10 }
+        ::-webkit-scrollbar-thumb { background: #242a33; border-radius: 3px }
+        ::-webkit-scrollbar-thumb:hover { background: #E3B76B }
+
+        .nav-link { position: relative }
+        .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: #E3B76B; transition: width .3s ease }
+        .nav-link:hover::after { width: 100% }
+
+        .btn-primary { background: #E3B76B; color: #0b0d10; position: relative; overflow: hidden; transition: all .3s ease }
+        .btn-primary::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .45), transparent); transition: left .5s ease }
+        .btn-primary:hover::before { left: 100% }
+        .btn-primary:hover { background: #F0CB8A; box-shadow: 0 0 30px rgba(227,183,107, .3) }
+        .btn-primary:disabled { opacity: .7; cursor: wait }
+        .btn-outline { border: 1px solid #4A5360; color: #ECEFF1; transition: all .3s ease }
+        .btn-outline:hover { border-color: #E3B76B; color: #E3B76B; background: rgba(227,183,107, .05) }
+        .btn-ghost { background: transparent; color: #ECEFF1; transition: all .3s ease }
+        .btn-ghost:hover { background: rgba(255, 255, 255, .05) }
+
+        .marquee-track { display: flex; width: max-content }
+        @keyframes marquee { 0% { transform: translateX(0) } 100% { transform: translateX(-50%) } }
+        .animate-marquee { animation: marquee 25s linear infinite }
+
+        .size-btn { transition: all .2s ease }
+        .size-btn:hover:not(.sold-out) { border-color: #E3B76B; color: #E3B76B }
+        .size-btn.active { background: #E3B76B; border-color: #E3B76B; color: #0b0d10 }
+        .size-btn.sold-out { opacity: .35; cursor: not-allowed; text-decoration: line-through; pointer-events: none }
+
+        .toast { position: fixed; bottom: 30px; right: 30px; z-index: 9999; background: #171b21; border: 1px solid rgba(227,183,107, .3); padding: 16px 24px; border-radius: 12px; transform: translateY(100px); opacity: 0; transition: all .4s cubic-bezier(.25, .46, .45, .94) }
+        .toast.show { transform: translateY(0); opacity: 1 }
+
+        .mobile-menu { position: fixed; inset: 0; z-index: 100; background: rgba(11, 13, 16, .98); backdrop-filter: blur(20px); transform: translateX(100%); transition: transform .4s cubic-bezier(.25, .46, .45, .94) }
+        .mobile-menu.open { transform: translateX(0) }
+
+        .hero-gradient { background: radial-gradient(ellipse at 50% 0%, rgba(227,183,107, .09) 0%, transparent 60%), radial-gradient(ellipse at 80% 60%, rgba(143, 184, 222, .06) 0%, transparent 50%) }
+        .grid-bg { background-image: linear-gradient(rgba(227,183,107, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(227,183,107, .025) 1px, transparent 1px); background-size: 60px 60px }
+
+        .reveal { opacity: 0; transform: translateY(50px); transition: all .8s cubic-bezier(.25, .46, .45, .94) }
+        .reveal.visible { opacity: 1; transform: translateY(0) }
+        .reveal-left { opacity: 0; transform: translateX(-60px); transition: all .8s cubic-bezier(.25, .46, .45, .94) }
+        .reveal-left.visible { opacity: 1; transform: translateX(0) }
+        .reveal-right { opacity: 0; transform: translateX(60px); transition: all .8s cubic-bezier(.25, .46, .45, .94) }
+        .reveal-right.visible { opacity: 1; transform: translateX(0) }
+
+        .cursor-dot { position: fixed; width: 8px; height: 8px; background: #E3B76B; border-radius: 50%; pointer-events: none; z-index: 9999 }
+        .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid rgba(227,183,107, .4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: width .15s ease, height .15s ease, background .15s ease }
+        .cursor-ring.hover { width: 56px; height: 56px; border-color: rgba(227,183,107, .7); background: rgba(227,183,107, .05) }
+        .magnetic { transition: transform .3s ease }
+
+        .line-draw { width: 0; height: 2px; background: #E3B76B; transition: width 1s cubic-bezier(.25, .46, .45, .94) }
+        .line-draw.visible { width: 60px }
+
+        .overlay { position: fixed; inset: 0; z-index: 200; background: rgba(0, 0, 0, .6); backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity .3s ease }
+        .overlay.active { opacity: 1; pointer-events: all }
+
+        .drawer-right { position: fixed; top: 0; right: 0; bottom: 0; z-index: 210; width: 100%; max-width: 440px; background: #101318; border-left: 1px solid rgba(255, 255, 255, .05); transform: translateX(100%); transition: transform .4s cubic-bezier(.25, .46, .45, .94); display: flex; flex-direction: column }
+        .drawer-right.active { transform: translateX(0) }
+
+        .modal-center { position: fixed; inset: 0; z-index: 210; display: flex; align-items: center; justify-content: center; padding: 20px; pointer-events: none }
+        .modal-center.active { pointer-events: all }
+        .modal-center .modal-box { background: #101318; border: 1px solid rgba(255, 255, 255, .05); border-radius: 20px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; transform: scale(.9) translateY(20px); opacity: 0; transition: all .4s cubic-bezier(.25, .46, .45, .94) }
+        .modal-center.active .modal-box { transform: scale(1) translateY(0); opacity: 1 }
+
+        .input-field { width: 100%; padding: 12px 16px; background: #171b21; border: 1px solid rgba(255, 255, 255, .08); border-radius: 12px; color: #ECEFF1; font-size: 14px; transition: all .3s ease; outline: none }
+        .input-field:focus { border-color: rgba(227,183,107, .45); box-shadow: 0 0 0 3px rgba(227,183,107, .08) }
+        .input-field::placeholder { color: #4A5360 }
+
+        @keyframes checkDraw { 0% { stroke-dashoffset: 48 } 100% { stroke-dashoffset: 0 } }
+        @keyframes scaleIn { 0% { transform: scale(0) } 60% { transform: scale(1.15) } 100% { transform: scale(1) } }
+        .confirm-check { animation: scaleIn .5s cubic-bezier(.25, .46, .45, .94) .2s both }
+        .confirm-check path { stroke-dasharray: 48; stroke-dashoffset: 48; animation: checkDraw .5s ease .5s forwards }
+        /* ===== RECEIPT PRINTER (order confirmation) ===== */
+        .modal-center .modal-box.rp-box { background: transparent; border: 0; max-width: 380px; padding: 0 4px 8px; box-shadow: none }
+        .rp { position: relative; isolation: isolate; display: flex; flex-direction: column; align-items: center; width: 100%; --rp-inset: 12px; --rp-r: 24px }
+        .rp-machine { position: relative; isolation: isolate; width: 100%; overflow: hidden; border-radius: var(--rp-r); border: 1px solid #05070a; padding: var(--rp-inset); padding-bottom: 32px;
+            background: linear-gradient(180deg, #2b323c 0%, #1a1f27 100%);
+            box-shadow: 0 20px 36px -20px rgba(0, 0, 0, .8), 0 6px 14px -8px rgba(0, 0, 0, .6), inset 0 1px 0 rgba(255, 255, 255, .12), inset 0 -1px 0 rgba(0, 0, 0, .6) }
+        .rp-machine::before { content: ''; position: absolute; inset: 0; z-index: 0; border-radius: inherit; pointer-events: none; opacity: .5; mix-blend-mode: multiply;
+            background: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") }
+        .rp-header { position: relative; z-index: 10; display: flex; height: 44px; align-items: flex-start; justify-content: space-between }
+        .rp-logo { height: 32px; width: auto; object-fit: contain }
+        .rp-btn { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 9px; border: 1px solid #05070a; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #ECEFF1; cursor: pointer;
+            background: linear-gradient(180deg, #3a424e, #2a3039); box-shadow: 0 3px 0 #05070a, inset 0 1px 0 rgba(255, 255, 255, .15); transition: transform .12s ease, box-shadow .12s ease }
+        .rp-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #05070a, inset 0 1px 0 rgba(255, 255, 255, .15) }
+        .rp-screen { position: relative; z-index: 10; isolation: isolate; overflow: hidden; border-radius: calc(var(--rp-r) - var(--rp-inset)); border: 1px solid #000; background: #07090c; padding: 16px; color: #ECEFF1; box-shadow: inset 0 0 14px rgba(0, 0, 0, .8) }
+        .rp-screen::after { content: ''; position: absolute; inset: 0; z-index: 20; border-radius: inherit; pointer-events: none; box-shadow: inset 0 0 24px 4px rgba(0, 0, 0, .55) }
+        .rp-screen-in { position: relative; z-index: 10 }
+        .rp-line { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 16px; font-size: 13px; line-height: 1.4 }
+        .rp-line p + p { color: #8A94A0; font-size: 12px }
+        .rp-line strong { color: #E3B76B; white-space: nowrap }
+        .rp-status { display: flex; align-items: center; gap: 8px; min-width: 0 }
+        .rp-ind { position: relative; display: grid; place-items: center; width: 20px; height: 20px; flex-shrink: 0 }
+        .rp-ind > * { animation: rpPop .16s cubic-bezier(.23, 1, .32, 1) both }
+        .rp-spin { width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid rgba(138, 148, 160, .35); border-top-color: #8A94A0; animation: rpSpin .8s linear infinite, rpPop .16s ease both }
+        .rp-stxt { font-size: 12px; font-weight: 600; color: #8A94A0; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; animation: rpTxt .18s cubic-bezier(.23, 1, .32, 1) both }
+        .rp[data-stage="complete"] .rp-stxt { color: #E3B76B }
+        .rp-slot { position: absolute; left: 24px; right: 24px; bottom: var(--rp-inset); z-index: 40; height: 8px; border-radius: 4px; background: #000; border: 1px solid #000; box-shadow: inset 0 0 4px #000 }
+
+        .rp-output { position: relative; z-index: 50; margin-top: -16px; width: calc(80% + 3rem); max-width: 100%; overflow: hidden; padding: 0 1.5rem }
+        .rp-glow { pointer-events: none; position: absolute; left: 1.5rem; right: 1.5rem; top: -4px; z-index: 20; height: 8px; background: rgba(0, 0, 0, .75); filter: blur(6px) }
+        .rp[data-stage="processing"] .rp-glow { display: none }
+        .rp-feed { position: relative; isolation: isolate; opacity: 0; transform: translateY(calc(-100% + 2px)) }
+        .rp-feed::before { content: ''; position: absolute; left: .75rem; right: .75rem; top: .75rem; bottom: 1rem; z-index: 0; border-radius: 2px; box-shadow: 0 8px 24px rgba(0, 0, 0, .45); pointer-events: none }
+        .rp[data-stage="printing"] .rp-feed { opacity: 1; animation: rpFeed 1.75s linear forwards }
+        .rp[data-stage="complete"] .rp-feed { opacity: 1; transform: none }
+        @keyframes rpFeed { 0%{transform:translateY(calc(-100% + 2px))} 7.5%{transform:translateY(-91%)} 10.5%{transform:translateY(-91%)} 18.0%{transform:translateY(-81%)} 21.0%{transform:translateY(-81%)} 28.5%{transform:translateY(-70%)} 31.5%{transform:translateY(-70%)} 39.0%{transform:translateY(-58%)} 42.0%{transform:translateY(-58%)} 49.5%{transform:translateY(-45%)} 52.5%{transform:translateY(-45%)} 60.0%{transform:translateY(-32%)} 63.0%{transform:translateY(-32%)} 70.5%{transform:translateY(-20%)} 73.5%{transform:translateY(-20%)} 81.0%{transform:translateY(-10%)} 84.0%{transform:translateY(-10%)} 91.5%{transform:translateY(-3%)} 94.5%{transform:translateY(-3%)} 100%{transform:translateY(0%)} }
+        @keyframes rpSpin { to { transform: rotate(360deg) } }
+        @keyframes rpPop { from { opacity: 0; transform: scale(.9) } to { opacity: 1; transform: none } }
+        @keyframes rpTxt { from { opacity: 0; transform: translateY(4px) } to { opacity: 1; transform: none } }
+        .rp-paper { position: relative; z-index: 10; min-height: 20rem; padding: 28px 22px 34px; color: #15171a; background-color: #f6f3ea; font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'Courier New', monospace; font-size: 12px; line-height: 1.55;
+            background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 160px 160px }
+        .rp-paper h2 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -.02em; text-align: center; line-height: 1 }
+        .rp-paper .rp-sub { margin-top: 6px; text-align: center; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; opacity: .65 }
+        .rp-paper hr { border: 0; border-top: 1px dashed rgba(0, 0, 0, .4); margin: 14px 0 }
+        .rp-paper .rp-row { display: flex; justify-content: space-between; gap: 12px }
+        .rp-paper .rp-row > span:last-child { text-align: right; white-space: nowrap }
+        .rp-paper .rp-it { margin-bottom: 8px }
+        .rp-paper .rp-it small { display: block; font-size: 11px; opacity: .65 }
+        .rp-paper .rp-total { font-size: 15px; font-weight: 700 }
+        .rp-paper .rp-thanks { text-align: center; font-size: 11px; opacity: .8 }
+        .rp-bars { height: 34px; margin-top: 14px; opacity: .85; background: repeating-linear-gradient(90deg, #111 0 2px, transparent 2px 4px, #111 4px 5px, transparent 5px 8px, #111 8px 11px, transparent 11px 13px) }
+        .rp-keep { margin-top: 18px; width: 100%; max-width: 280px; padding: 14px 0; border-radius: 12px; font-size: 12px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .3s ease .1s, transform .3s ease .1s }
+        .rp[data-stage="complete"] .rp-keep { opacity: 1; transform: none; pointer-events: auto }
+        @media (prefers-reduced-motion: reduce) {
+            .rp[data-stage="printing"] .rp-feed { animation: none; transform: none }
+            .rp-spin { animation: none }
+            .rp-ind > *, .rp-stxt { animation: none }
+        }
+
+
+        /* ===== HERO COLOR DOTS ===== */
+        .hero-dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .25); cursor: pointer; padding: 0; transition: transform .3s cubic-bezier(.34, 1.56, .64, 1), border-color .3s ease }
+        .hero-dot:hover { transform: scale(1.3); border-color: #fff }
+
+        /* ===== PRODUCT GRID: 1 / 2 / 3 columns, last row always centered ===== */
+        .pgrid { display: grid; grid-template-columns: 1fr }
+        @media (min-width: 640px) {
+            .pgrid { grid-template-columns: repeat(2, 1fr) }
+            .pgrid > :last-child:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - 1rem); justify-self: center }
+        }
+        @media (min-width: 1024px) {
+            .pgrid { grid-template-columns: repeat(6, 1fr) }
+            .pgrid > * { grid-column: span 2 }
+            .pgrid > :last-child:nth-child(odd) { grid-column: 4 / span 2; width: auto; justify-self: stretch }
+            .pgrid > :nth-child(4) { grid-column: 2 / span 2 }
+            .pgrid > :nth-child(5) { grid-column: 4 / span 2 }
+        }
+
+        /* ===== PRODUCT CARDS (appear one by one on scroll) ===== */
+        .pcard { opacity: 0; transform: translateY(70px) scale(.96); filter: blur(6px); transition: opacity .8s ease, transform .9s cubic-bezier(.22, 1, .36, 1), filter .8s ease; transition-delay: var(--d, 0s) }
+        .pcard.visible { opacity: 1; transform: none; filter: none }
+        .pcard-btn { display: block; width: 100%; text-align: left; border-radius: 22px; overflow: hidden; background: #12161c; border: 1px solid rgba(255, 255, 255, .07); cursor: pointer; transition: transform .45s cubic-bezier(.22, 1, .36, 1), box-shadow .45s ease, border-color .45s ease; -webkit-tap-highlight-color: transparent }
+        @media (hover: hover) { .pcard-btn:hover { transform: translateY(-8px); border-color: var(--c); box-shadow: 0 28px 60px var(--glow) } }
+        .pcard-btn:active { transform: scale(.985) }
+        .pcard-img { position: relative; aspect-ratio: 1 / 1; background: #fff; overflow: hidden }
+        .pcard-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #fff; transition: transform .6s cubic-bezier(.22, 1, .36, 1) }
+        @media (hover: hover) { .pcard-btn:hover .pcard-img img { transform: scale(1.05) } }
+        .ph { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center }
+        .ph-name { font-size: clamp(18px, 3vw, 30px); font-weight: 700; letter-spacing: .12em }
+        .ph-sub { font-size: 10px; letter-spacing: .3em; text-transform: uppercase; opacity: .6 }
+        .pcard-no { position: absolute; top: 14px; left: 16px; font-size: 11px; font-weight: 700; letter-spacing: .25em; color: rgba(0, 0, 0, .45) }
+        .pcard-bar { height: 5px; background: var(--c) }
+        .pcard-cta { font-size: 10px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; color: #8A94A0; transition: color .3s ease, transform .3s ease }
+        @media (hover: hover) { .pcard-btn:hover .pcard-cta { color: #fff; transform: translateX(4px) } }
+
+        /* ===== CAROUSEL ===== */
+        .carousel-container { position: relative; overflow: hidden }
+        .carousel-track { display: flex; height: 100%; transition: transform .5s cubic-bezier(.25, .46, .45, .94) }
+        .carousel-slide { min-width: 100%; height: 100%; flex-shrink: 0; position: relative; overflow: hidden; background: #fff }
+        .carousel-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; background: #fff }
+        .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; width: 44px; height: 44px; border-radius: 50%; background: rgba(11, 13, 16, .75); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, .1); color: #ECEFF1; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .3s ease }
+        .carousel-arrow:hover { background: var(--ac, #E3B76B); border-color: var(--ac, #E3B76B); color: var(--acfg, #0b0d10) }
+        .carousel-arrow.left { left: 12px }
+        .carousel-arrow.right { right: 12px }
+        .carousel-dots { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10 }
+        .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(0, 0, 0, .25); border: none; cursor: pointer; transition: all .3s ease; padding: 0 }
+        .carousel-dot.active { background: var(--ac, #E3B76B); width: 28px; border-radius: 4px }
+
+        /* ===== FULL-SCREEN SET PAGE — each set brings its own color theme ===== */
+        .setpage {
+            --pg: #0b0d10; --card: #171b21; --card2: #101318; --tx: #ECEFF1; --mu: #8A94A0; --ac: #E3B76B; --acfg: #0b0d10; --bd: rgba(255, 255, 255, .08);
+            position: fixed; inset: 0; z-index: 150; overflow-y: auto; overscroll-behavior: contain;
+            background: var(--pg); color: var(--tx);
+            clip-path: circle(0px at var(--ox, 50%) var(--oy, 50%)); visibility: hidden;
+            transition: clip-path .75s cubic-bezier(.77, 0, .18, 1), background-color .5s ease, color .5s ease, visibility 0s linear .75s
+        }
+        .setpage.open {
+            clip-path: circle(160vmax at var(--ox, 50%) var(--oy, 50%)); visibility: visible;
+            transition: clip-path .75s cubic-bezier(.77, 0, .18, 1), background-color .5s ease, color .5s ease, visibility 0s
+        }
+        .setpage .text-white, .setpage .text-brand-bone { color: var(--tx) !important }
+        .setpage .text-brand-muted { color: var(--mu) !important }
+        .setpage .text-brand-faint { color: var(--mu) !important; opacity: .8 }
+        .setpage .text-brand-accent { color: var(--ac) !important }
+        .setpage .text-brand-black { color: var(--acfg) !important }
+        .setpage .bg-brand-accent { background: var(--ac) !important }
+        .setpage .bg-brand-gray { background: var(--card) !important }
+        .setpage .bg-brand-dark { background: var(--card2) !important }
+        .setpage .bg-brand-black\/95 { background: var(--pg) !important }
+        .setpage .border-white\/5, .setpage .border-white\/10 { border-color: var(--bd) !important }
+        .setpage .line-draw { background: var(--ac) }
+        .setpage .btn-primary { background: var(--ac); color: var(--acfg) }
+        .setpage .btn-primary:hover { background: var(--ac); filter: brightness(1.12); box-shadow: 0 10px 30px rgba(0, 0, 0, .25) }
+        .setpage .btn-outline { border-color: var(--bd); color: var(--tx) }
+        .setpage .btn-outline:hover { border-color: var(--ac); color: var(--ac); background: transparent }
+        .setpage .input-field { background: var(--card2); border-color: var(--bd); color: var(--tx) }
+        .setpage .input-field:focus { border-color: var(--ac); box-shadow: none }
+        .setpage .input-field::placeholder { color: var(--mu); opacity: .7 }
+        .setpage input[type=checkbox], .setpage input[type=radio] { accent-color: var(--ac) }
+        .setpage .size-btn { border-color: var(--bd) !important }
+        .setpage .size-btn:hover:not(.sold-out) { border-color: var(--ac) !important; color: var(--ac) !important }
+        .setpage .size-btn.active { background: var(--ac); border-color: var(--ac) !important; color: var(--acfg) !important }
+        .setpage .sp-bar { background: var(--pg); border-color: var(--bd) }
+        .setpage .sp-dot { border-color: var(--bd) }
+        .setpage .sp-dot.active { border-color: var(--ac); box-shadow: 0 0 0 2px var(--pg), 0 0 0 4px var(--ac) }
+        .setpage .other-tile { border-color: var(--bd) }
+        .setpage .other-tile.active { border-color: var(--ac) }
+        .setpage button.hover-ac:hover { color: var(--ac) }
+
+        .sp-bar { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--bd) }
+        .sp-dot { width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .15); cursor: pointer; transition: all .25s ease; padding: 0 }
+        .sp-dot:hover { transform: scale(1.12) }
+        .other-tile { transition: all .25s ease }
+        .other-tile:hover { transform: translateY(-2px) }
+        .sp-cta { position: sticky; bottom: 0; z-index: 25; padding-bottom: env(safe-area-inset-bottom); transition: transform .3s ease, opacity .3s ease }
+        .sp-cta.hide { transform: translateY(110%); opacity: 0; pointer-events: none }
+        .sp-bar { padding-top: env(safe-area-inset-top) }
+
+        @media(max-width: 768px) {
+            .cursor-dot, .cursor-ring { display: none !important }
+            .drawer-right { max-width: 100% }
+            .carousel-arrow { width: 36px; height: 36px }
+            .carousel-arrow.left { left: 8px }
+            .carousel-arrow.right { right: 8px }
+            .input-field { font-size: 16px }
+        }
+
+        /* ===== TACTILE BUTTONS: raised key with a hard bottom edge that presses down ===== */
+        .btn-primary, .btn-outline, .size-btn, .tactile-sm { transition: transform .12s ease, box-shadow .12s ease, background-color .25s ease, border-color .25s ease, color .25s ease, filter .25s ease }
+        .btn-primary { --tb: #E3B76B; background-image: linear-gradient(180deg, rgba(255, 255, 255, .24), rgba(255, 255, 255, 0) 55%) }
+        .setpage .btn-primary { --tb: var(--ac) }
+        .btn-primary, .btn-primary:hover, .setpage .btn-primary, .setpage .btn-primary:hover {
+            box-shadow: 0 4px 0 color-mix(in srgb, var(--tb) 48%, #000), 0 12px 18px -8px rgba(0, 0, 0, .55), inset 0 1px 0 rgba(255, 255, 255, .45) }
+        .btn-primary:hover { filter: brightness(1.07) }
+        .btn-primary:active, .setpage .btn-primary:active {
+            transform: translateY(3px); filter: brightness(.97);
+            box-shadow: 0 1px 0 color-mix(in srgb, var(--tb) 48%, #000), 0 4px 8px -4px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .3) }
+        .btn-primary:disabled { transform: none }
+
+        .btn-outline { background-image: linear-gradient(180deg, #2c333d, #1c2129); border-color: #05070a }
+        .btn-outline, .btn-outline:hover { box-shadow: 0 3px 0 #05070a, 0 10px 16px -8px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .13) }
+        .btn-outline:hover { border-color: #E3B76B; color: #E3B76B }
+        .btn-outline:active { transform: translateY(2px); box-shadow: 0 1px 0 #05070a, inset 0 1px 0 rgba(255, 255, 255, .1) }
+        .setpage .btn-outline, .setpage .btn-outline:hover { background: var(--card); background-image: linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, 0) 60%);
+            box-shadow: 0 3px 0 color-mix(in srgb, var(--pg) 55%, #000), 0 10px 16px -8px rgba(0, 0, 0, .4), inset 0 1px 0 rgba(255, 255, 255, .28) }
+        .setpage .btn-outline:hover { border-color: var(--ac); color: var(--ac) }
+        .setpage .btn-outline:active { transform: translateY(2px); box-shadow: 0 1px 0 color-mix(in srgb, var(--pg) 55%, #000), inset 0 1px 0 rgba(255, 255, 255, .2) }
+
+        .size-btn { box-shadow: 0 3px 0 rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .1) }
+        .size-btn:active, .size-btn.active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .15) }
+        .size-btn.sold-out { box-shadow: none }
+        .tactile-sm { background: var(--card2, #171b21); box-shadow: 0 3px 0 rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .1) }
+        .tactile-sm:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .1) }
+        .carousel-arrow, #soundToggle { box-shadow: 0 3px 0 rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .2) }
+        .carousel-arrow:active { transform: translateY(calc(-50% + 2px)); box-shadow: 0 1px 0 rgba(0, 0, 0, .5) }
+        #soundToggle:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, .5) }
+
+        /* ===== LOADER (glitch) ===== */
+        .loader { position: fixed; inset: 0; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 24px; text-align: center;
+            background: radial-gradient(ellipse at 50% 0%, rgba(227, 183, 107, .09) 0%, transparent 60%), #0b0d10; transition: opacity .6s ease, visibility 0s linear .6s }
+        .loader.hide { opacity: 0; visibility: hidden; pointer-events: none }
+        .glitch { position: relative; font-size: clamp(30px, 8vw, 56px); font-weight: 700; line-height: 1.2; color: #ECEFF1; letter-spacing: 5px; z-index: 1; animation: lgShift 1s ease-in-out infinite alternate }
+        .glitch.ar { letter-spacing: 0; font-family: 'Segoe UI', 'Noto Sans Arabic', Tahoma, Arial, sans-serif }
+        .glitch::before, .glitch::after { display: block; content: attr(data-glitch); position: absolute; top: 0; left: 0; opacity: .8 }
+        .glitch::before { animation: lgGlitch .4s cubic-bezier(.25, .46, .45, .94) both infinite; color: #E3B76B; z-index: -1 }
+        .glitch::after { animation: lgGlitch .4s cubic-bezier(.25, .46, .45, .94) reverse both infinite; color: #9FD1F2; z-index: -2 }
+        .loader-bar { width: min(220px, 60vw); height: 3px; margin-top: 10px; border-radius: 2px; background: rgba(255, 255, 255, .08); overflow: hidden }
+        .loader-bar span { display: block; height: 100%; width: 0; background: #E3B76B; box-shadow: 0 0 12px rgba(227, 183, 107, .6); animation: lgBar 1.9s cubic-bezier(.4, 0, .2, 1) forwards }
+        @keyframes lgBar { to { width: 100% } }
+        @keyframes lgGlitch { 0% { transform: translate(0) } 20% { transform: translate(-3px, 3px) } 40% { transform: translate(-3px, -3px) } 60% { transform: translate(3px, 3px) } 80% { transform: translate(3px, -3px) } to { transform: translate(0) } }
+        @keyframes lgShift { 0%, 40%, 44%, 58%, 61%, 65%, 69%, 73%, 100% { transform: skewX(0deg) } 41% { transform: skewX(10deg) } 42% { transform: skewX(-10deg) } 59% { transform: skewX(40deg) skewY(10deg) } 60% { transform: skewX(-40deg) skewY(-10deg) } 63% { transform: skewX(10deg) skewY(-5deg) } 70% { transform: skewX(-50deg) skewY(-20deg) } 71% { transform: skewX(10deg) skewY(-10deg) } }
+        @media (prefers-reduced-motion: reduce) { .glitch, .glitch::before, .glitch::after { animation: none } }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="particleCanvas" aria-hidden="true" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none"></canvas>
+
+    <!-- LOADER -->
+    <div class="loader" id="loader" role="status" aria-label="Loading">
+        <div data-glitch="WE LIVE" class="glitch">WE LIVE</div>
+        <div data-glitch="موش كيف كيف" class="glitch ar" dir="rtl" lang="ar">موش كيف كيف</div>
+        <div class="loader-bar"><span></span></div>
+    </div>
+
+    <!-- Background soundtrack -->
+    <!-- main background beat: put your file next to this page as beat.mp3 (or change the name below); soundtrack.mp3 plays only if beat.mp3 is missing -->
+    <audio id="bgSoundtrack" loop autoplay>
+        <source src="beat.mp3">
+        <source src="soundtrack.mp3">
+    </audio>
+    <button id="soundToggle" aria-label="Toggle soundtrack" style="position:fixed;bottom:20px;right:20px;z-index:9999;width:48px;height:48px;border-radius:50%;background:rgba(11,13,16,.75);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);color:#ECEFF1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease">
+        <span class="iconify text-xl" data-icon="mdi:volume-high"></span>
+    </button>
+
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <div id="toast" class="toast flex items-center gap-3">
+        <span class="iconify text-brand-accent text-xl" data-icon="mdi:check-circle"></span>
+        <span id="toastMsg" class="text-sm text-brand-bone">Added to bag</span>
+    </div>
+
+    <div class="overlay" id="cartOverlay" onclick="closeCart()"></div>
+    <div class="overlay" id="checkoutOverlay" onclick="closeCheckout()"></div>
+    <div class="overlay" id="confirmOverlay" onclick="closeConfirm()"></div>
+
+    <!-- BAG DRAWER -->
+    <div class="drawer-right" id="cartDrawer">
+        <div class="flex items-center justify-between px-6 py-5 border-b border-white/5">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <span class="iconify text-brand-accent" data-icon="mdi:shopping-outline"></span> Your Bag <span id="cartDrawerCount" class="text-sm text-brand-muted font-normal">(0)</span>
+            </h3>
+            <button onclick="closeCart()" class="w-10 h-10 rounded-lg flex items-center justify-center text-brand-muted hover:text-white hover:bg-white/5 transition-all">
+                <span class="iconify text-xl" data-icon="mdi:close"></span>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto px-6 py-4" id="cartItems">
+            <div id="cartEmpty" class="flex flex-col items-center justify-center h-full text-center">
+                <span class="iconify text-5xl text-brand-faint mb-4" data-icon="mdi:cart-off"></span>
+                <p class="text-brand-muted text-sm">Your bag is empty</p>
+                <button onclick="closeCart()" class="mt-4 btn-outline px-6 py-2.5 rounded-lg text-xs font-semibold tracking-wider uppercase">Keep Browsing</button>
+            </div>
+            <div id="cartFilled" class="space-y-4 hidden"></div>
+        </div>
+        <div id="cartFooter" class="hidden border-t border-white/5 px-6 py-5 space-y-4">
+            <div class="flex items-center justify-between text-sm">
+                <span class="text-brand-muted">Subtotal</span>
+                <span id="cartSubtotal" class="font-bold text-white">0 DT</span>
+            </div>
+            <div class="flex items-center justify-between text-xs">
+                <span class="text-brand-faint flex items-center gap-1"><span class="iconify text-brand-accent" data-icon="mdi:truck-delivery-outline"></span> Delivery</span>
+                <span class="text-brand-bone font-semibold">9 DT</span>
+            </div>
+            <div class="h-px bg-white/5"></div>
+            <div class="flex items-center justify-between">
+                <span class="text-base font-bold text-white">Total</span>
+                <span id="cartTotal" class="text-xl font-bold text-brand-accent">0 DT</span>
+            </div>
+            <button onclick="proceedToCheckout()" class="btn-primary w-full py-4 rounded-xl text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-2">
+                <span class="iconify" data-icon="mdi:lock-outline"></span> Checkout
+            </button>
+            <p class="text-center text-[10px] tracking-widest uppercase text-brand-faint">Cash on delivery or bank transfer</p>
+        </div>
+    </div>
+
+    <!-- BAG CHECKOUT MODAL -->
+    <div class="modal-center" id="checkoutModal" style="display:none">
+        <div class="modal-box p-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <span class="iconify text-brand-accent" data-icon="mdi:lock-outline"></span> Checkout
+                </h3>
+                <button onclick="closeCheckout()" class="w-10 h-10 rounded-lg flex items-center justify-center text-brand-muted hover:text-white hover:bg-white/5 transition-all">
+                    <span class="iconify text-xl" data-icon="mdi:close"></span>
+                </button>
+            </div>
+            <form onsubmit="placeOrder(event)" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-2">Full Name</label>
+                        <input type="text" required placeholder="John Doe" class="input-field" id="shipFirst">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-2">Phone</label>
+                        <input type="tel" required placeholder="+216 XX XXX XXX" class="input-field" id="shipPhone">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-2">Address</label>
+                    <input type="text" required placeholder="Street, building, apt... — City" class="input-field" id="shipAddress">
+                    <label class="flex items-center gap-2 mt-3 text-xs text-brand-muted cursor-pointer select-none">
+                        <input type="checkbox" id="teboulbaCheck" onchange="updateDeliveryDisplay()" class="w-4 h-4">
+                        <span>I'm ordering from <span class="text-white font-semibold">Teboulba</span> — <span class="text-brand-accent font-semibold">free delivery</span></span>
+                    </label>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-3">Payment Method</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-3 p-4 rounded-xl border border-white/5 bg-brand-gray cursor-pointer hover:border-brand-accent/30 transition-colors">
+                            <input type="radio" name="payment" value="cod" checked class="w-4 h-4">
+                            <span class="iconify text-xl text-green-500" data-icon="mdi:cash-multiple"></span>
+                            <div>
+                                <span class="text-sm font-semibold text-white">Cash on Delivery</span>
+                                <p class="text-[10px] text-brand-faint">Pay when you receive</p>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-3 p-4 rounded-xl border border-white/5 bg-brand-gray cursor-pointer hover:border-brand-accent/30 transition-colors">
+                            <input type="radio" name="payment" value="transfer" class="w-4 h-4">
+                            <span class="iconify text-xl text-yellow-500" data-icon="mdi:bank-transfer"></span>
+                            <div>
+                                <span class="text-sm font-semibold text-white">Bank Transfer</span>
+                                <p class="text-[10px] text-brand-faint">Send to our account</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="p-4 rounded-xl border border-white/5 bg-brand-gray">
+                    <h4 class="text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-3">Order Summary</h4>
+                    <div id="checkoutSummaryItems" class="space-y-2 text-sm"></div>
+                    <div class="mt-3 pt-3 border-t border-white/5 space-y-1">
+                        <div class="flex justify-between text-xs text-brand-muted">
+                            <span>Delivery</span><span id="checkoutDeliveryLine">9 DT</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-white">Total</span>
+                            <span id="checkoutSummaryTotal" class="font-bold text-brand-accent text-lg">0 DT</span>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" id="placeOrderBtn" class="btn-primary w-full py-4 rounded-xl text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-2">
+                    <span class="iconify" data-icon="mdi:check"></span> Place Order
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ORDER CONFIRMATION — receipt printer -->
+    <div class="modal-center" id="confirmModal" style="display:none">
+        <div class="modal-box rp-box">
+            <section id="rp" class="rp" data-stage="processing" aria-label="Receipt printer">
+                <div class="rp-machine">
+                    <div class="rp-header">
+                        <img src="drop.png" alt="" class="rp-logo" onerror="this.style.display='none'">
+                        <button type="button" class="rp-btn" onclick="closeConfirm()"><span class="iconify" data-icon="mdi:close"></span> Close</button>
+                    </div>
+                    <div class="rp-screen">
+                        <div class="rp-screen-in">
+                            <div id="rpSummary" class="rp-line"></div>
+                            <div id="rpStatus" class="rp-status" role="status" aria-live="polite"></div>
+                        </div>
+                    </div>
+                    <div class="rp-slot" aria-hidden="true"></div>
+                </div>
+                <div class="rp-output">
+                    <div class="rp-glow" aria-hidden="true"></div>
+                    <div class="rp-feed">
+                        <article id="rpPaper" class="rp-paper" aria-hidden="true"></article>
+                    </div>
+                </div>
+                <button type="button" class="btn-primary rp-keep" onclick="closeConfirm();location.reload()">Keep Browsing</button>
+            </section>
+        </div>
+    </div>
+
+    <!-- MOBILE MENU -->
+    <div id="mobileMenu" class="mobile-menu flex flex-col items-center justify-center gap-8">
+        <button onclick="toggleMobile()" class="absolute top-6 right-6 text-brand-bone"><span class="iconify text-2xl" data-icon="mdi:close"></span></button>
+        <a href="#home" onclick="toggleMobile()" class="text-2xl font-semibold tracking-tight text-brand-bone hover:text-brand-accent transition-colors">HOME</a>
+        <a href="#drop" onclick="toggleMobile()" class="text-2xl font-semibold tracking-tight text-brand-bone hover:text-brand-accent transition-colors">THE SETS</a>
+        <a href="#about" onclick="toggleMobile()" class="text-2xl font-semibold tracking-tight text-brand-bone hover:text-brand-accent transition-colors">ABOUT</a>
+        <a href="#contact" onclick="toggleMobile()" class="text-2xl font-semibold tracking-tight text-brand-bone hover:text-brand-accent transition-colors">CONTACT</a>
+    </div>
+
+    <!-- NAV -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50" style="background:rgba(11,13,16,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.04);transform:translateY(-100%);transition:transform .6s cubic-bezier(.25,.46,.45,.94)">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#home" class="flex items-center gap-3 magnetic">
+                <img src="drop.png" alt="STORY" class="h-12 object-contain">
+                <img src="drop1.png" alt="Collab" class="h-8 object-contain">
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#home" class="nav-link text-xs font-medium tracking-widest uppercase text-brand-muted hover:text-brand-bone transition-colors magnetic">Home</a>
+                <a href="#drop" class="nav-link text-xs font-medium tracking-widest uppercase text-brand-muted hover:text-brand-bone transition-colors magnetic">The Sets</a>
+                <a href="#about" class="nav-link text-xs font-medium tracking-widest uppercase text-brand-muted hover:text-brand-bone transition-colors magnetic">About</a>
+                <a href="#contact" class="nav-link text-xs font-medium tracking-widest uppercase text-brand-muted hover:text-brand-bone transition-colors magnetic">Contact</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="cartBtn" onclick="openCart()" class="relative text-brand-muted hover:text-brand-accent transition-colors magnetic">
+                    <span class="iconify text-xl" data-icon="mdi:shopping-outline"></span>
+                    <span id="cartCount" class="absolute -top-2 -right-2 w-4 h-4 bg-brand-accent text-brand-black text-[10px] font-bold rounded-full flex items-center justify-center" style="transform:scale(0);transition:transform .3s cubic-bezier(.68,-.55,.27,1.55)">0</span>
+                </button>
+                <button onclick="toggleMobile()" class="md:hidden text-brand-muted hover:text-brand-bone transition-colors">
+                    <span class="iconify text-xl" data-icon="mdi:menu"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ANNOUNCEMENT BAR -->
+    <div class="fixed top-16 left-0 right-0 z-40 overflow-hidden" style="transform:translateY(-100%);transition:transform .6s cubic-bezier(.25,.46,.45,.94) .3s, background-color .9s ease, color .9s ease;background:#9B9B9E;color:#1b1b1d" id="announceBar">
+        <div class="marquee-track animate-marquee" id="marqueeTrack"></div>
+    </div>
+
+    <!-- HERO -->
+    <section id="home" class="hero-gradient min-h-screen flex items-center relative pt-24 pb-16 grid-bg overflow-hidden">
+        <div class="max-w-4xl mx-auto px-6 w-full relative z-10 text-center">
+            <div id="heroTag" style="opacity:0;transform:translateY(20px)">
+                <div class="flex items-center justify-center gap-3 mb-6">
+                    <div class="line-draw" id="heroLine"></div>
+                    <span class="text-[10px] font-bold tracking-[.3em] uppercase text-brand-accent">Second Drop — 2026</span>
+                    <div class="line-draw" id="heroLine2"></div>
+                </div>
+            </div>
+            <h1 id="heroTitle" style="opacity:0" class="text-5xl sm:text-6xl lg:text-8xl font-bold tracking-tighter leading-[.92] text-white"><img src="drop.png" alt="WE LIVE موش كيف كيف" class="mx-auto block w-full max-w-[780px] h-auto" onerror="this.replaceWith(document.createTextNode(this.alt))"></h1>
+            <p id="heroDesc" style="opacity:0;transform:translateY(20px)" class="mt-6 text-base sm:text-lg text-brand-muted leading-relaxed max-w-md mx-auto">Chapter two is a full matching set — hoodie and sweatpants, in five colors. Scroll down and pick yours.</p>
+            <div id="heroBtns" style="opacity:0;transform:translateY(20px)" class="mt-8 flex flex-wrap items-center justify-center gap-4">
+                <a href="#drop" class="btn-primary px-8 py-4 rounded-lg text-sm font-semibold tracking-wider uppercase inline-flex items-center gap-2 magnetic">Shop The Sets <span class="iconify text-base" data-icon="mdi:arrow-down"></span></a>
+                <a href="#about" class="btn-outline px-8 py-4 rounded-lg text-sm font-semibold tracking-wider uppercase magnetic">Discover</a>
+            </div>
+            <div id="heroDots" style="opacity:0;transform:translateY(20px)" class="mt-10 flex items-center justify-center gap-3"></div>
+        </div>
+    </section>
+
+    <!-- THE SETS — cards appear one by one while scrolling -->
+    <section id="drop" class="py-24 lg:py-32 relative" style="background:linear-gradient(180deg,transparent 0%,rgba(255,255,255,.02) 50%,transparent 100%)">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <span class="text-[10px] font-bold tracking-[.3em] uppercase text-brand-accent">002</span>
+                <h2 class="mt-3 text-4xl sm:text-6xl font-bold tracking-tighter text-white">THE SETS</h2>
+                <p class="mt-4 text-brand-muted text-sm max-w-lg mx-auto">Hoodie + sweatpants. Five colors. Open one to see it in its own world.</p>
+                <div class="flex justify-center mt-6"><div class="line-draw"></div></div>
+            </div>
+            <div id="productGrid" class="pgrid gap-8 lg:gap-10"></div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="py-24 lg:py-32 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal-left">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="line-draw"></div>
+                        <span class="text-[10px] font-bold tracking-[.3em] uppercase text-brand-accent">Who Are We</span>
+                    </div>
+                    <h2 class="text-4xl sm:text-5xl font-bold tracking-tighter text-white">STORY<br>IS HKEYA.</h2>
+                    <p class="mt-6 text-brand-muted leading-relaxed">Chapter one was a single piece. Chapter two is the whole outfit. Each set is built to be worn head to toe — one cut, five moods, no compromises.</p>
+                    <p class="mt-4 text-brand-muted leading-relaxed">Born in Tunisia, built for the streets of everywhere. The story keeps going.</p>
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <div class="px-5 py-3 rounded-xl border border-white/5 bg-brand-gray">
+                            <span class="block text-lg font-bold text-white">Drop 02</span>
+                            <span class="text-[10px] tracking-widest uppercase text-brand-faint">Current Chapter</span>
+                        </div>
+                        <div class="px-5 py-3 rounded-xl border border-white/5 bg-brand-gray">
+                            <span class="block text-lg font-bold text-brand-accent">5</span>
+                            <span class="text-[10px] tracking-widest uppercase text-brand-faint">Colorways</span>
+                        </div>
+                        <div class="px-5 py-3 rounded-xl border border-white/5 bg-brand-gray">
+                            <span class="block text-lg font-bold text-white">TN</span>
+                            <span class="text-[10px] tracking-widest uppercase text-brand-faint">Made In Tunisia</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal-right">
+                    <div class="relative">
+                        <div class="absolute -inset-4 bg-gradient-to-br from-brand-accent/5 to-transparent rounded-3xl blur-2xl"></div>
+                        <div class="relative rounded-2xl overflow-hidden border border-white/5">
+                            <div id="aboutBox" class="relative h-[380px] sm:h-[440px] bg-brand-gray">
+                                <img src="all.png" data-n="0" alt="All five sets — Violet, Bordeaux, Sun, Charcoal, Black" class="absolute inset-0 w-full h-full object-cover" onerror="aboutImgNext(this)">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-black/85 via-transparent to-transparent pointer-events-none"></div>
+                            <div class="absolute bottom-6 left-6 right-6">
+                                <p class="text-lg font-bold text-white tracking-tight">"One fit. Five colors. Your chapter."</p>
+                                <p class="text-xs text-brand-muted mt-1">— HKEYA THE BRAND</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-24 lg:py-32 relative border-t border-white/5">
+        <div class="max-w-3xl mx-auto px-6">
+            <div class="flex items-center gap-3 mb-6 justify-center">
+                <div class="line-draw"></div>
+                <span class="text-[10px] font-bold tracking-[.3em] uppercase text-brand-accent">Get In Touch</span>
+                <div class="line-draw"></div>
+            </div>
+            <h2 class="text-4xl sm:text-5xl font-bold tracking-tighter text-white text-center">CONTACT US</h2>
+            <p class="mt-4 text-brand-muted leading-relaxed text-center max-w-lg mx-auto">Need help picking a size or a color? Ask about an order or a collab — we reply fast.</p>
+
+            <form id="contactForm" onsubmit="submitContactForm(event)" class="mt-10 space-y-5">
+                <input type="hidden" name="access_key" value="e4b334f2-41cb-4200-ac0e-76692cfda8f5">
+                <input type="hidden" name="subject" value="New Contact Message — STORY Sets by HKEYA">
+                <input type="hidden" name="from_name" value="STORY Sets by HKEYA — Contact Form">
+
+                <div class="grid sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-2">Name</label>
+                        <input type="text" name="name" required placeholder="Your name" class="w-full px-4 py-3 rounded-xl bg-brand-gray border border-white/5 text-white placeholder-brand-faint focus:outline-none focus:border-brand-accent/40 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-2">Email</label>
+                        <input type="email" name="email" required placeholder="you@email.com" class="w-full px-4 py-3 rounded-xl bg-brand-gray border border-white/5 text-white placeholder-brand-faint focus:outline-none focus:border-brand-accent/40 transition-colors">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-2">Message</label>
+                    <textarea name="message" required rows="5" placeholder="How can we help?" class="w-full px-4 py-3 rounded-xl bg-brand-gray border border-white/5 text-white placeholder-brand-faint focus:outline-none focus:border-brand-accent/40 transition-colors resize-none"></textarea>
+                </div>
+                <button type="submit" id="contactSubmitBtn" class="btn-primary w-full py-4 rounded-xl font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2">
+                    <span class="iconify" data-icon="mdi:send-outline"></span> Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 py-16" style="background:rgba(11,13,16,.55)">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-12">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="drop.png" alt="STORY" class="h-10 object-contain">
+                        <img src="drop1.png" alt="Collab" class="h-6 object-contain">
+                    </div>
+                    <p class="text-sm text-brand-muted leading-relaxed">Full sets, five colors. Every drop is a new chapter.</p>
+                    <div class="flex gap-3 mt-6">
+                        <a href="https://www.instagram.com/hkeya_the_brand/?__pwa=1" class="w-10 h-10 rounded-lg border border-white/5 bg-brand-gray flex items-center justify-center text-brand-muted hover:text-brand-accent hover:border-brand-accent/20 transition-all">
+                            <span class="iconify text-lg" data-icon="mdi:instagram"></span>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-bold tracking-[.3em] uppercase text-brand-faint mb-4">Quick Links</h4>
+                    <div class="space-y-3">
+                        <a href="#home" class="block text-sm text-brand-muted hover:text-brand-accent transition-colors">Home</a>
+                        <a href="#drop" class="block text-sm text-brand-muted hover:text-brand-accent transition-colors">The Sets</a>
+                        <a href="#about" class="block text-sm text-brand-muted hover:text-brand-accent transition-colors">About</a>
+                        <a href="#contact" class="block text-sm text-brand-muted hover:text-brand-accent transition-colors">Contact</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-bold tracking-[.3em] uppercase text-brand-faint mb-4">Info</h4>
+                    <div class="space-y-3">
+                        <p class="text-sm text-brand-muted">Delivery: <span class="text-brand-bone font-semibold">9 DT</span> — free in Teboulba</p>
+                        <p class="text-sm text-brand-muted">Made in Tunisia</p>
+                        <p class="text-sm text-brand-muted">Limited edition drops</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-brand-faint">© 2026 STORY by HKEYA THE BRAND. All rights reserved.</p>
+                <p class="text-xs text-brand-faint">Delivery fee: 9 DT nationwide</p>
+            </div>
+            <div class="mt-4 text-center">
+                <p class="text-xs text-brand-faint inline-flex items-center justify-center gap-2">
+                    <span>Website by Yucef Chebil</span>
+                    <!-- put the path to your logo in src — it stays hidden until the file exists -->
+                    <img src="YC.png" alt="Yucef Chebil" class="h-14 w-auto object-contain" onerror="this.style.display='none'">
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== FULL-SCREEN SET PAGE (each set has its own color theme) ========== -->
+    <div class="setpage" id="setPage" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Set details">
+
+        <div class="sp-bar">
+            <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
+                <button onclick="closeSetPage()" class="hover-ac flex items-center gap-2 text-xs font-semibold tracking-widest uppercase transition-colors" aria-label="Back to all sets">
+                    <span class="iconify text-xl" data-icon="mdi:arrow-left"></span> <span>All sets</span>
+                </button>
+                <div class="flex items-center gap-2" id="spDots"></div>
+                <button onclick="openCart()" class="hover-ac relative transition-colors" aria-label="Open bag">
+                    <span class="iconify text-xl" data-icon="mdi:shopping-outline"></span>
+                    <span id="spCartCount" class="absolute -top-2 -right-2 w-4 h-4 bg-brand-accent text-brand-black text-[10px] font-bold rounded-full flex items-center justify-center" style="transform:scale(0);transition:transform .3s cubic-bezier(.68,-.55,.27,1.55)">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- banner -->
+        <section id="spBanner" class="relative px-6 py-16 sm:py-24 overflow-hidden">
+            <span id="spBannerNo" class="absolute right-6 -bottom-6 text-[12rem] sm:text-[18rem] font-bold leading-none opacity-10 select-none pointer-events-none">01</span>
+            <div class="max-w-6xl mx-auto relative z-10">
+                <p class="text-[10px] font-bold tracking-[.3em] uppercase opacity-70" id="spBannerTag">Drop 02 — Set 01 / 06</p>
+                <h2 id="spBannerTitle" class="mt-3 text-4xl min-[400px]:text-5xl sm:text-8xl lg:text-9xl font-bold tracking-tighter leading-[.9] break-words">SET ASH</h2>
+                <p class="mt-4 text-xs tracking-[.3em] uppercase opacity-70">HKEYA THE BRAND</p>
+            </div>
+        </section>
+
+        <!-- gallery + info -->
+        <section class="max-w-6xl mx-auto px-6 py-12 grid lg:grid-cols-2 gap-10 lg:gap-14">
+            <div>
+                <div class="carousel-container aspect-square rounded-2xl border border-white/5 relative">
+                    <div class="carousel-track" id="productCarousel"></div>
+                    <button class="carousel-arrow left" onclick="slideCarousel(-1)" aria-label="Previous image">
+                        <span class="iconify text-xl" data-icon="mdi:chevron-left"></span>
+                    </button>
+                    <button class="carousel-arrow right" onclick="slideCarousel(1)" aria-label="Next image">
+                        <span class="iconify text-xl" data-icon="mdi:chevron-right"></span>
+                    </button>
+                    <div class="carousel-dots" id="carouselDots"></div>
+                    <div id="slideCounter" class="absolute top-4 left-4 z-10 px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10">
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-white/70"><span id="slideNum">1</span> / <span id="slideTotal">3</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col justify-center">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
+                    <span class="text-[10px] font-bold tracking-[.3em] uppercase text-brand-accent">Available Now</span>
+                </div>
+                <div class="flex items-baseline gap-3">
+                    <span class="text-4xl font-bold text-brand-accent" id="setPrice">120 DT</span>
+                    <span class="text-xs font-semibold text-brand-bone">+ 9 DT delivery</span>
+                </div>
+                <p class="mt-5 text-sm font-medium text-brand-bone leading-relaxed" id="setDesc"></p>
+
+                <div class="mt-7">
+                    <label class="text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-3 block">Size</label>
+                    <div class="flex gap-3" id="sizeSelector"></div>
+                    <p class="mt-2 text-[10px] font-semibold text-brand-bone" id="stockNote"></p>
+                </div>
+
+                <div class="mt-6">
+                    <label class="text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-3 block">Quantity</label>
+                    <div class="flex items-center gap-1 w-fit">
+                        <button onclick="changeQty(-1)" class="tactile-sm w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-brand-muted hover:opacity-70">
+                            <span class="iconify" data-icon="mdi:minus"></span>
+                        </button>
+                        <span id="qtyDisplay" class="w-12 h-10 flex items-center justify-center text-sm font-bold text-white">1</span>
+                        <button onclick="changeQty(1)" class="tactile-sm w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-brand-muted hover:opacity-70">
+                            <span class="iconify" data-icon="mdi:plus"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                    <button onclick="document.getElementById('spOrder').scrollIntoView({behavior:'smooth'})" class="btn-primary flex-1 py-4 rounded-xl text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-2">
+                        <span class="iconify" data-icon="mdi:arrow-down"></span> Order This Set
+                    </button>
+                    <button onclick="addToCart()" class="btn-outline flex-1 py-4 rounded-xl text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-2">
+                        <span class="iconify" data-icon="mdi:shopping-outline"></span> Add to Bag
+                    </button>
+                </div>
+
+                <div class="mt-6 grid grid-cols-2 gap-3">
+                    <div class="flex items-center gap-2 text-xs font-semibold text-brand-bone"><span class="iconify text-brand-accent text-sm" data-icon="mdi:truck-delivery-outline"></span> 9 DT delivery</div>
+                    <div class="flex items-center gap-2 text-xs font-semibold text-brand-bone"><span class="iconify text-brand-accent text-sm" data-icon="mdi:shield-check-outline"></span> Premium quality</div>
+                    <div class="flex items-center gap-2 text-xs font-semibold text-brand-bone"><span class="iconify text-brand-accent text-sm" data-icon="mdi:palette-outline"></span> 5 colorways</div>
+                    <div class="flex items-center gap-2 text-xs font-semibold text-brand-bone"><span class="iconify text-brand-accent text-sm" data-icon="mdi:tag-outline"></span> Limited edition</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- details -->
+        <section class="max-w-6xl mx-auto px-6 pb-12">
+            <div class="grid sm:grid-cols-3 gap-4">
+                <div class="p-6 rounded-2xl border border-white/5 bg-brand-gray">
+                    <span class="iconify text-2xl text-brand-accent" data-icon="mdi:tshirt-crew-outline"></span>
+                    <h4 class="mt-3 text-sm font-bold text-white tracking-wide uppercase">The Set</h4>
+                    <p class="mt-2 text-sm text-brand-muted leading-relaxed">A hoodie and matching baggy sweatpants, made to be worn together as one outfit.</p>
+                </div>
+                <div class="p-6 rounded-2xl border border-white/5 bg-brand-gray">
+                    <span class="iconify text-2xl text-brand-accent" data-icon="mdi:timer-sand"></span>
+                    <h4 class="mt-3 text-sm font-bold text-white tracking-wide uppercase">Limited Run</h4>
+                    <p class="mt-2 text-sm text-brand-muted leading-relaxed">Once a color is gone, it's gone. Drop 02 is made in small quantities.</p>
+                </div>
+                <div class="p-6 rounded-2xl border border-white/5 bg-brand-gray">
+                    <span class="iconify text-2xl text-brand-accent" data-icon="mdi:map-marker-outline"></span>
+                    <h4 class="mt-3 text-sm font-bold text-white tracking-wide uppercase">Made in Tunisia</h4>
+                    <p class="mt-2 text-sm text-brand-muted leading-relaxed">Designed and produced locally by HKEYA THE BRAND.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- order form -->
+        <section id="spOrder" class="max-w-2xl mx-auto px-6 py-12">
+            <div class="flex items-center gap-3 mb-6 justify-center">
+                <div class="line-draw visible"></div>
+                <span class="text-[10px] font-bold tracking-[.3em] uppercase text-brand-accent">Place Your Order</span>
+                <div class="line-draw visible"></div>
+            </div>
+            <form onsubmit="placeSetOrder(event)" class="p-6 sm:p-8 rounded-2xl border border-white/5 bg-brand-gray space-y-4">
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-2">Full Name</label>
+                        <input type="text" required placeholder="John Doe" class="input-field" id="spName">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-2">Phone</label>
+                        <input type="tel" required placeholder="+216 XX XXX XXX" class="input-field" id="spPhone">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-2">Address</label>
+                    <input type="text" required placeholder="Street, building, apt... — City" class="input-field" id="spAddress">
+                    <label class="flex items-center gap-2 mt-3 text-xs text-brand-muted cursor-pointer select-none">
+                        <input type="checkbox" id="spTeboulba" onchange="updateSetSummary()" class="w-4 h-4">
+                        <span>I'm ordering from <span class="text-white font-semibold">Teboulba</span> — <span class="text-brand-accent font-semibold">free delivery</span></span>
+                    </label>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-3">Payment Method</label>
+                    <div class="grid sm:grid-cols-2 gap-2">
+                        <label class="flex items-center gap-3 p-4 rounded-xl border border-white/5 bg-brand-dark cursor-pointer">
+                            <input type="radio" name="spPay" value="cod" checked class="w-4 h-4">
+                            <div>
+                                <span class="text-sm font-semibold text-white">Cash on Delivery</span>
+                                <p class="text-[10px] text-brand-faint">Pay when you receive</p>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-3 p-4 rounded-xl border border-white/5 bg-brand-dark cursor-pointer">
+                            <input type="radio" name="spPay" value="transfer" class="w-4 h-4">
+                            <div>
+                                <span class="text-sm font-semibold text-white">Bank Transfer</span>
+                                <p class="text-[10px] text-brand-faint">Send to our account</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="p-4 rounded-xl border border-white/5 bg-brand-dark">
+                    <h4 class="text-[10px] font-bold tracking-widest uppercase text-brand-faint mb-3">Order Summary</h4>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-brand-muted" id="spSumItem">—</span>
+                        <span class="text-white font-semibold" id="spSumItemPrice">0 DT</span>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-white/5 space-y-1">
+                        <div class="flex justify-between text-xs text-brand-muted"><span>Delivery</span><span id="spSumDelivery">9 DT</span></div>
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-white">Total</span>
+                            <span id="spSumTotal" class="font-bold text-brand-accent text-lg">0 DT</span>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" id="spOrderBtn" class="btn-primary w-full py-4 rounded-xl text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-2">
+                    <span class="iconify" data-icon="mdi:check"></span> Place Order
+                </button>
+            </form>
+        </section>
+
+        <!-- other colors -->
+        <section class="max-w-6xl mx-auto px-6 pt-4 pb-20">
+            <h4 class="text-center text-[10px] font-bold tracking-[.3em] uppercase text-brand-faint mb-6">Other Colors</h4>
+            <div class="flex flex-wrap justify-center gap-3" id="spOthers"></div>
+        </section>
+
+        <!-- phone: sticky order bar -->
+        <div class="sp-cta md:hidden" id="spCta">
+            <div class="flex items-center gap-3 px-4 py-3 bg-brand-black/95 border-t border-white/10">
+                <div class="flex-1 min-w-0">
+                    <p class="text-[10px] tracking-widest uppercase text-brand-faint truncate" id="spCtaName">SET ASH</p>
+                    <p class="text-lg font-bold text-brand-accent leading-tight" id="spCtaPrice">120 DT</p>
+                </div>
+                <button onclick="document.getElementById('spOrder').scrollIntoView({behavior:'smooth'})" class="btn-primary px-6 py-3 rounded-xl text-xs font-bold tracking-widest uppercase">Order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // ===== PRODUCT DATA — edit names, prices, sizes, photos and themes here =====
+        // sizes: true = in stock, false = sold out.
+        // imgs: optional photos (the drawn mock-up shows until a photo file exists).
+        // theme: the colors of this set's own page (pg = page, card, card2 = inputs, tx = text, mu = muted text, ac = buttons/accents, acfg = text on accent, bd = borders).
+        const SETS = [{
+            id: 'violet', img: 'violet.png', name: 'Violet', tone: 'violet', hex: '#C27DF1', price: 120,
+            sizes: { S: true, M: true, L: true, XL: true },
+            theme: { pg: '#C27DF1', card: '#D1A0F6', card2: '#CA8FF3', tx: '#2A0A44', mu: '#5B2D80', ac: '#2A0A44', acfg: '#F3E0FF', bd: 'rgba(42,10,68,.2)' }
+        }, {
+            id: 'bordeaux', img: 'bordeaux.png', name: 'Bordeaux', tone: 'bordeaux', hex: '#611C31', price: 120,
+            sizes: { S: true, M: true, L: true, XL: true },
+            theme: { pg: '#611C31', card: '#74293F', card2: '#6B2236', tx: '#FFF0F4', mu: '#E0AFC0', ac: '#FFE97A', acfg: '#4B1226', bd: 'rgba(255,255,255,.16)' }
+        }, {
+            id: 'sun', img: 'yellow.png', name: 'Sun', tone: 'sun yellow', hex: '#FDDA58', price: 120,
+            sizes: { S: true, M: true, L: true, XL: true },
+            theme: { pg: '#FDDA58', card: '#FFE787', card2: '#FFE170', tx: '#0F2A6B', mu: '#3D5599', ac: '#1649C0', acfg: '#FFF3B8', bd: 'rgba(15,42,107,.22)' }
+        }, {
+            id: 'charcoal', img: 'charcoal.png', name: 'Charcoal', tone: 'charcoal', hex: '#3A3B3A', price: 120,
+            sizes: { S: true, M: true, L: true, XL: true },
+            theme: { pg: '#2B2C2B', card: '#383938', card2: '#323332', tx: '#F1F1F1', mu: '#A9ABA9', ac: '#3B74FF', acfg: '#FFFFFF', bd: 'rgba(255,255,255,.14)' }
+        }, {
+            id: 'black', img: 'black.png', name: 'Black', tone: 'black', hex: '#161616', price: 120,
+            sizes: { S: true, M: true, L: true, XL: true },
+            theme: { pg: '#0E0E0E', card: '#1A1A1A', card2: '#141414', tx: '#FFFFFF', mu: '#9A9A9A', ac: '#FFFFFF', acfg: '#0E0E0E', bd: 'rgba(255,255,255,.14)' }
+        }];
+        // PHOTOS: each set has its own `img:` path above — change it if your files live elsewhere
+        // (e.g. 'images/ash.png' or a full https:// link). Want a swipeable gallery? Add `extra: ['images/ash-back.png']` to that set.
+        SETS.forEach(s => {
+            s.desc = `Hoodie and baggy sweatpants in ${s.tone}. STORY logo on the chest, "WE LIVE موش كيف كيف" printed across the back.`;
+            s.imgs = [s.img].concat(s.extra || []);
+        });
+
+        const DELIVERY_FEE = 9;
+        const WEB3FORMS_ACCESS_KEY = 'e4b334f2-41cb-4200-ac0e-76692cfda8f5';
+
+        let currentSet = 0;
+        let currentSlide = 0;
+        let selectedSize = 'L';
+        let quantity = 1;
+        let cart = [];
+        let currentDeliveryFee = DELIVERY_FEE;
+        let historyPushed = false;
+
+        // ===== COLOR HELPERS =====
+        function shade(hex, amt) {
+            const n = parseInt(hex.slice(1), 16);
+            let r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+            const t = amt < 0 ? 0 : 255, p = Math.abs(amt);
+            r = Math.round((t - r) * p + r); g = Math.round((t - g) * p + g); b = Math.round((t - b) * p + b);
+            return `rgb(${r},${g},${b})`;
+        }
+
+        function hexA(hex, a) {
+            const n = parseInt(hex.slice(1), 16);
+            return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
+        }
+
+        function ink(hex) {
+            const n = parseInt(hex.slice(1), 16);
+            const lum = 0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255);
+            return lum > 150 ? '#1b1b1d' : '#f4f1ea';
+        }
+
+        // About image: tries all.png, then other common names/types, then falls back to the five colors
+        const ABOUT_TRY = ['all.png', 'all.jpg', 'all.jpeg', 'all.webp', 'All.png', 'All.jpg', 'ALL.png', 'images/all.png'];
+        function aboutImgNext(img) {
+            const n = (+img.dataset.n || 0) + 1;
+            if (n < ABOUT_TRY.length) { img.dataset.n = n; img.src = ABOUT_TRY[n]; }
+            else img.style.display = 'none';
+        }
+
+        // ===== PHOTOS =====
+        function photo(src, alt) {
+            return `<img src="${src}" alt="${alt}" onerror="this.style.display='none'">`;
+        }
+
+        // shown in the set's own color until its photo exists
+        function placeholder(s) {
+            return `<div class="ph" style="background:linear-gradient(160deg,${shade(s.hex, .18)},${s.hex} 60%,${shade(s.hex, -.2)});color:${ink(s.hex)}">
+                <span class="ph-name">SET ${s.name.toUpperCase()}</span>
+                <span class="ph-sub">Photo coming soon</span>
+            </div>`;
+        }
+
+        // ===== TOP BANNER: takes the color (and name) of the set being looked at =====
+        let bannerIndex = -1, bannerLockUntil = 0;
+        let pTarget = [227, 183, 107];
+
+        function particleTint(hex) {
+            const n = parseInt(hex.slice(1), 16);
+            let r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+            const lum = .299 * r + .587 * g + .114 * b;
+            if (lum < 110) { const t = Math.min(1, (110 - lum) / 110 + .45); r += (255 - r) * t; g += (255 - g) * t; b += (255 - b) * t; }
+            return [Math.round(r), Math.round(g), Math.round(b)];
+        }
+
+        function setBanner(i, lock) {
+            if (lock) bannerLockUntil = Date.now() + 6000;
+            if (i === bannerIndex) return;
+            bannerIndex = i;
+            const s = SETS[i];
+            const bar = document.getElementById('announceBar');
+            bar.style.background = s.hex;
+            pTarget = particleTint(s.hex);
+            bar.style.color = ink(s.hex);
+            const msg = `DROP 02 — SET ${s.name.toUpperCase()} — ${s.price} DT — 9 DT DELIVERY — ${SETS.length} COLORS — LIMITED EDITION — HKEYA THE BRAND — `.repeat(3);
+            document.querySelectorAll('.bn-text').forEach(el => el.textContent = msg);
+        }
+
+        // left alone it cycles through every color; looking at / hovering / opening a set pins it to that set for a few seconds
+        setInterval(() => {
+            if (Date.now() < bannerLockUntil) return;
+            setBanner((bannerIndex + 1) % SETS.length);
+        }, 3500);
+
+        // ===== BUILD STATIC PARTS =====
+        function buildStatic() {
+            const span = `<span class="bn-text whitespace-nowrap text-xs font-semibold tracking-[.2em] uppercase px-8 py-2"></span>`;
+            document.getElementById('marqueeTrack').innerHTML = span + span;
+            setBanner(0);
+
+            document.getElementById('aboutBox').style.background = 'linear-gradient(90deg,' + SETS.map((x, i) => `${x.hex} ${i * 100 / SETS.length}% ${(i + 1) * 100 / SETS.length}%`).join(',') + ')';
+
+            document.getElementById('heroDots').innerHTML = SETS.map((s, i) =>
+                `<button class="hero-dot" style="background:${s.hex}" onmouseenter="setBanner(${i},true)" onclick="openSetPage(${i},event)" aria-label="Open set ${s.name}" title="${s.name}"></button>`).join('');
+
+            // Product cards — revealed one by one while scrolling
+            document.getElementById('productGrid').innerHTML = SETS.map((s, i) =>
+                `<article class="pcard" data-i="${i}" onmouseenter="setBanner(${i},true)" style="--c:${s.hex};--glow:${hexA(s.hex, .42)};--d:${(i % 3) * .12}s">
+                    <button class="pcard-btn" onclick="openSetPage(${i},event)" aria-label="Open set ${s.name}">
+                        <div class="pcard-img">
+                            ${placeholder(s)}
+                            ${photo(s.imgs[0], 'Set ' + s.name)}
+                            <span class="pcard-no">0${i + 1}</span>
+                        </div>
+                        <div class="pcard-bar"></div>
+                        <div class="p-5">
+                            <div class="flex items-center justify-between gap-3">
+                                <h3 class="text-xl font-bold tracking-tight text-white">SET ${s.name.toUpperCase()}</h3>
+                                <span class="w-5 h-5 rounded-full border border-white/20 flex-shrink-0" style="background:${s.hex}"></span>
+                            </div>
+                            <div class="mt-3 flex items-center justify-between">
+                                <span class="text-lg font-bold" style="color:${ink(s.hex) === '#1b1b1d' ? s.hex : shade(s.hex, .6)}">${s.price} DT</span>
+                                <span class="pcard-cta">View set →</span>
+                            </div>
+                        </div>
+                    </button>
+                </article>`).join('');
+            const cardObserver = new IntersectionObserver(entries => {
+                entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); cardObserver.unobserve(en.target); } });
+            }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('.pcard').forEach(el => cardObserver.observe(el));
+
+            // scrolling past a card turns the top banner to that set's color
+            const syncObserver = new IntersectionObserver(entries => {
+                entries.forEach(en => { if (en.isIntersecting) setBanner(+en.target.dataset.i, true); });
+            }, { threshold: 0.6 });
+            document.querySelectorAll('.pcard').forEach(el => syncObserver.observe(el));
+
+            document.getElementById('spDots').innerHTML = SETS.map((s, i) =>
+                `<button class="sp-dot" style="background:${s.hex}" onclick="switchSet(${i})" aria-label="${s.name}" title="${s.name}"></button>`).join('');
+            document.getElementById('spOthers').innerHTML = SETS.map((s, i) =>
+                `<button class="other-tile flex items-center gap-3 px-4 py-3 rounded-xl border border-white/10 bg-brand-gray" onclick="switchSet(${i})">
+                    <span class="w-8 h-8 rounded-full border border-white/15" style="background:${s.hex}"></span>
+                    <span class="text-xs font-semibold tracking-widest uppercase text-brand-bone">${s.name}</span>
+                </button>`).join('');
+        }
+
+        // ===== SET PAGE =====
+        function openSetPage(i, evt) {
+            currentSet = i;
+            setBanner(i, true);
+            quantity = 1;
+            document.getElementById('qtyDisplay').textContent = 1;
+            const page = document.getElementById('setPage');
+
+            // the color spreads out from where the visitor clicked
+            let x = window.innerWidth / 2, y = window.innerHeight / 2;
+            if (evt && typeof evt.clientX === 'number' && (evt.clientX || evt.clientY)) { x = evt.clientX; y = evt.clientY; }
+            else if (evt && evt.currentTarget && evt.currentTarget.getBoundingClientRect) {
+                const r = evt.currentTarget.getBoundingClientRect();
+                x = r.left + r.width / 2; y = r.top + r.height / 2;
+            }
+            page.style.setProperty('--ox', x + 'px');
+            page.style.setProperty('--oy', y + 'px');
+
+            renderSet();
+            page.scrollTop = 0;
+            page.classList.add('open');
+            page.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            if (!historyPushed) {
+                try { history.pushState({ setPage: 1 }, ''); historyPushed = true; } catch (err) {}
+            }
+        }
+
+        function closeSetPage(fromPop) {
+            const page = document.getElementById('setPage');
+            page.classList.remove('open');
+            page.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            if (historyPushed) {
+                historyPushed = false;
+                if (fromPop !== true) { try { history.back(); } catch (err) {} }
+            }
+        }
+
+        function switchSet(i) {
+            currentSet = i;
+            setBanner(i, true);
+            renderSet();
+            document.getElementById('setPage').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderSet() {
+            const s = SETS[currentSet];
+            const th = s.theme;
+            const page = document.getElementById('setPage');
+            ['pg', 'card', 'card2', 'tx', 'mu', 'ac', 'acfg', 'bd'].forEach(k => page.style.setProperty('--' + k, th[k]));
+
+            const banner = document.getElementById('spBanner');
+            banner.style.background = `linear-gradient(180deg, ${shade(s.hex, .12)} 0%, ${th.pg} 100%)`;
+            banner.style.color = th.tx;
+            document.getElementById('spBannerTitle').textContent = 'SET ' + s.name.toUpperCase();
+            document.getElementById('spBannerNo').textContent = '0' + (currentSet + 1);
+            document.getElementById('spBannerTag').textContent = `Drop 02 — Set 0${currentSet + 1} / 0${SETS.length}`;
+            document.getElementById('setPrice').textContent = s.price + ' DT';
+            document.getElementById('setDesc').textContent = s.desc;
+            document.getElementById('spCtaName').textContent = 'SET ' + s.name.toUpperCase();
+            document.getElementById('spCtaPrice').textContent = s.price + ' DT';
+
+            document.querySelectorAll('.sp-dot').forEach((el, i) => el.classList.toggle('active', i === currentSet));
+            document.querySelectorAll('.other-tile').forEach((el, i) => el.classList.toggle('active', i === currentSet));
+
+            // Sizes
+            const keys = Object.keys(s.sizes);
+            if (!s.sizes[selectedSize]) selectedSize = keys.find(k => s.sizes[k]) || keys[0];
+            document.getElementById('sizeSelector').innerHTML = keys.map(k => {
+                const out = !s.sizes[k];
+                const active = k === selectedSize && !out;
+                return `<button class="size-btn ${out ? 'sold-out' : ''} ${active ? 'active' : ''} w-14 h-12 rounded-xl border border-white/10 text-sm font-bold tracking-wider flex items-center justify-center text-brand-bone" data-size="${k}" ${out ? 'disabled' : 'onclick="selectSize(this)"'}>${k}</button>`;
+            }).join('');
+            const soldOut = keys.filter(k => !s.sizes[k]);
+            document.getElementById('stockNote').textContent = soldOut.length ? `${soldOut.join(', ')} sold out` : 'All sizes available';
+
+            // Gallery: your photo(s); the set's color shows until a photo exists
+            currentSlide = 0;
+            document.getElementById('productCarousel').innerHTML = s.imgs.map((src, k) =>
+                `<div class="carousel-slide">
+                    ${placeholder(s)}
+                    ${photo(src, 'Set ' + s.name + ' — ' + (k + 1))}
+                </div>`).join('');
+            const multi = s.imgs.length > 1;
+            document.querySelectorAll('.carousel-arrow, #carouselDots, #slideCounter').forEach(el => { el.style.display = multi ? '' : 'none'; });
+            document.getElementById('carouselDots').innerHTML = s.imgs.map((_, k) =>
+                `<button class="carousel-dot ${k === 0 ? 'active' : ''}" onclick="goToSlide(${k})"></button>`).join('');
+            document.getElementById('slideTotal').textContent = s.imgs.length;
+            updateCarousel();
+            updateSetSummary();
+            bindHoverTargets();
+        }
+
+        // ===== CAROUSEL =====
+        function slideCarousel(dir) {
+            const total = SETS[currentSet].imgs.length;
+            currentSlide = (currentSlide + dir + total) % total;
+            updateCarousel();
+        }
+
+        function goToSlide(i) { currentSlide = i; updateCarousel(); }
+
+        function updateCarousel() {
+            document.getElementById('productCarousel').style.transform = `translateX(-${currentSlide * 100}%)`;
+            document.getElementById('slideNum').textContent = currentSlide + 1;
+            document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+        }
+
+        let touchStartX = 0;
+        const carouselContainer = document.querySelector('.carousel-container');
+        carouselContainer.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        carouselContainer.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) slideCarousel(diff > 0 ? 1 : -1);
+        }, { passive: true });
+
+        // ===== SIZE & QUANTITY =====
+        function selectSize(btn) {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedSize = btn.dataset.size;
+            updateSetSummary();
+        }
+
+        function changeQty(dir) {
+            quantity = Math.max(1, Math.min(10, quantity + dir));
+            document.getElementById('qtyDisplay').textContent = quantity;
+            updateSetSummary();
+        }
+
+        // ===== INLINE ORDER (set page) =====
+        function updateSetSummary() {
+            const s = SETS[currentSet];
+            const fee = document.getElementById('spTeboulba').checked ? 0 : DELIVERY_FEE;
+            const sub = s.price * quantity;
+            document.getElementById('spSumItem').textContent = `SET ${s.name.toUpperCase()} · ${selectedSize} × ${quantity}`;
+            document.getElementById('spSumItemPrice').textContent = sub + ' DT';
+            document.getElementById('spSumDelivery').textContent = fee === 0 ? 'Free' : fee + ' DT';
+            document.getElementById('spSumTotal').textContent = (sub + fee) + ' DT';
+        }
+
+        function newOrderNumber() {
+            return 'STS-' + String(Math.floor(Math.random() * 999999)).padStart(6, '0');
+        }
+
+        function sendOrder(orderData) {
+            return fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                body: JSON.stringify(orderData)
+            }).catch(err => console.error('Order email failed to send:', err));
+        }
+
+        // ===== RECEIPT PRINTER =====
+        let rpToken = 0, rpTimers = [];
+        const RP_LABELS = { processing: 'Processing your order', printing: 'Printing your receipt', complete: 'Order complete' };
+        const RP_CHECK = '<svg width="18" height="18" viewBox="0 0 256 256" fill="#E3B76B" aria-hidden="true"><path d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24Zm45.66 85.66-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 11.32Z"/></svg>';
+
+        function esc(t) {
+            return String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        // torn zig-zag bottom edge of the paper
+        function rpClip() {
+            const teeth = 40, depth = 4, pts = [];
+            for (let i = 0; i < teeth * 2; i++) {
+                const x = 100 - ((i + 1) * 100) / (teeth * 2);
+                pts.push(`${x}% ${i % 2 === 0 ? '100%' : `calc(100% - ${depth}px)`}`);
+            }
+            return `polygon(0 0, 100% 0, 100% calc(100% - ${depth}px), ${pts.join(', ')})`;
+        }
+
+        function rpSetStage(stage) {
+            const root = document.getElementById('rp');
+            root.dataset.stage = stage;
+            document.getElementById('rpPaper').setAttribute('aria-hidden', stage === 'complete' ? 'false' : 'true');
+            document.getElementById('rpStatus').innerHTML =
+                `<span class="rp-ind" aria-hidden="true">${stage === 'complete' ? RP_CHECK : '<span class="rp-spin"></span>'}</span><span class="rp-stxt">${RP_LABELS[stage]}</span>`;
+        }
+
+        function buildReceipt(o) {
+            const sub = o.items.reduce((t, c) => t + c.price * c.qty, 0);
+            const when = new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+            const first = o.items[0];
+            const count = o.items.reduce((t, c) => t + c.qty, 0);
+            document.getElementById('rpSummary').innerHTML =
+                `<div><p>${o.items.length > 1 ? esc(count + ' items') : esc(first.name)}</p><p>${o.items.length > 1 ? esc(o.num) : esc(first.color + ' · Size ' + first.size + ' × ' + first.qty)}</p></div><strong>${o.total} DT</strong>`;
+            const paper = document.getElementById('rpPaper');
+            paper.style.clipPath = rpClip();
+            paper.innerHTML = `
+                <h2>STORY</h2>
+                <p class="rp-sub">by HKEYA THE BRAND · Drop 02</p>
+                <hr>
+                <div class="rp-row"><span>Order</span><span><b>${esc(o.num)}</b></span></div>
+                <div class="rp-row"><span>Date</span><span>${esc(when)}</span></div>
+                <div class="rp-row"><span>Name</span><span>${esc(o.name)}</span></div>
+                <hr>
+                ${o.items.map(c => `<div class="rp-it"><div class="rp-row"><span>${esc(c.name)}</span><span>${c.price * c.qty} DT</span></div><small>${esc(c.color)} · Size ${esc(c.size)} × ${c.qty}</small></div>`).join('')}
+                <hr>
+                <div class="rp-row"><span>Subtotal</span><span>${sub} DT</span></div>
+                <div class="rp-row"><span>Delivery${o.teboulba ? ' (Teboulba)' : ''}</span><span>${o.fee === 0 ? 'Free' : o.fee + ' DT'}</span></div>
+                <div class="rp-row rp-total" style="margin-top:8px"><span>TOTAL</span><span>${o.total} DT</span></div>
+                <div class="rp-row" style="margin-top:6px"><span>Payment</span><span>${esc(o.pay)}</span></div>
+                <hr>
+                <p class="rp-thanks">Thanks for your order.<br>We'll call you shortly to confirm.<br>Delivery in 3-5 business days.</p>
+                <div class="rp-bars" aria-hidden="true"></div>`;
+        }
+
+        // opens the printer on "processing", prints once the order email request has finished
+        function startReceipt(order, ready) {
+            const token = ++rpToken;
+            rpTimers.forEach(clearTimeout);
+            rpTimers = [];
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            buildReceipt(order);
+            rpSetStage('processing');
+            const modal = document.getElementById('confirmModal');
+            modal.style.display = 'flex';
+            document.getElementById('confirmOverlay').classList.add('active');
+            requestAnimationFrame(() => modal.classList.add('active'));
+            document.body.style.overflow = 'hidden';
+
+            const minWait = new Promise(r => rpTimers.push(setTimeout(r, reduce ? 0 : 1400)));
+            Promise.all([Promise.resolve(ready).catch(() => {}), minWait]).then(() => {
+                if (token !== rpToken) return;
+                rpSetStage('printing');
+                rpTimers.push(setTimeout(() => { if (token === rpToken) rpSetStage('complete'); }, reduce ? 0 : 1800));
+            });
+        }
+
+        function placeSetOrder(e) {
+            e.preventDefault();
+            const s = SETS[currentSet];
+            if (!s.sizes[selectedSize]) { showToast('That size is sold out'); return; }
+            const btn = document.getElementById('spOrderBtn');
+            btn.innerHTML = '<span class="iconify animate-spin" data-icon="mdi:loading"></span> Processing...';
+            btn.disabled = true;
+
+            const isTeboulba = document.getElementById('spTeboulba').checked;
+            const fee = isTeboulba ? 0 : DELIVERY_FEE;
+            const sub = s.price * quantity;
+            const pm = document.querySelector('input[name="spPay"]:checked');
+            const pmLabels = { cod: 'Cash on Delivery', transfer: 'Bank Transfer' };
+            const orderNum = newOrderNumber();
+            const order = { num: orderNum, name: document.getElementById('spName').value, items: [{ name: 'SET ' + s.name.toUpperCase(), color: s.name, size: selectedSize, qty: quantity, price: s.price }], fee, total: sub + fee, pay: pmLabels[pm.value] || pm.value, teboulba: isTeboulba };
+
+            const sent = sendOrder({
+                access_key: WEB3FORMS_ACCESS_KEY,
+                subject: `New Order ${orderNum} — HKEYA THE BRAND (Sets)`,
+                from_name: 'HKEYA THE BRAND — Order Notification',
+                order_number: orderNum,
+                customer_name: document.getElementById('spName').value,
+                phone: document.getElementById('spPhone').value,
+                address: document.getElementById('spAddress').value + (isTeboulba ? ' (Teboulba — free delivery)' : ''),
+                payment_method: pmLabels[pm.value] || pm.value,
+                items: `SET ${s.name.toUpperCase()} — ${s.name} (Size ${selectedSize}) x${quantity} — ${sub} DT`,
+                delivery_fee: `${fee} DT`,
+                total: `${sub + fee} DT`
+            });
+            startReceipt(order, sent);
+            sent.finally(() => {
+                e.target.reset();
+                updateSetSummary();
+                btn.innerHTML = '<span class="iconify" data-icon="mdi:check"></span> Place Order';
+                btn.disabled = false;
+            });
+        }
+
+        // ===== BAG =====
+        function cartTotalItems() { return cart.reduce((s, c) => s + c.qty, 0); }
+        function cartSubtotal() { return cart.reduce((s, c) => s + c.price * c.qty, 0); }
+
+        function addToCart() {
+            const s = SETS[currentSet];
+            if (!s.sizes[selectedSize]) { showToast('That size is sold out'); return; }
+            const existing = cart.find(c => c.id === s.id && c.size === selectedSize);
+            if (existing) existing.qty += quantity;
+            else cart.push({ id: s.id, name: 'SET ' + s.name.toUpperCase(), color: s.name, hex: s.hex, size: selectedSize, qty: quantity, price: s.price });
+            updateCartUI();
+            showToast(`SET ${s.name.toUpperCase()} (${selectedSize}) × ${quantity} added to bag`);
+        }
+
+        function removeFromCart(id, size) {
+            cart = cart.filter(c => !(c.id === id && c.size === size));
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const count = cartTotalItems();
+            ['cartCount', 'spCartCount'].forEach(id => {
+                const el = document.getElementById(id);
+                el.textContent = count;
+                el.style.transform = count > 0 ? 'scale(1)' : 'scale(0)';
+            });
+            document.getElementById('cartDrawerCount').textContent = `(${count})`;
+
+            const emptyEl = document.getElementById('cartEmpty');
+            const filledEl = document.getElementById('cartFilled');
+            const footerEl = document.getElementById('cartFooter');
+
+            if (cart.length === 0) {
+                emptyEl.classList.remove('hidden');
+                filledEl.classList.add('hidden');
+                footerEl.classList.add('hidden');
+                return;
+            }
+            emptyEl.classList.add('hidden');
+            filledEl.classList.remove('hidden');
+            footerEl.classList.remove('hidden');
+            filledEl.innerHTML = cart.map(c => `
+                <div class="flex gap-4 p-4 rounded-xl border border-white/5 bg-brand-gray">
+                    <div class="w-16 h-16 rounded-lg flex-shrink-0 border border-white/10" style="background:${c.hex}"></div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-white truncate">${c.name}</p>
+                        <p class="text-xs text-brand-muted">${c.color} · Size ${c.size} · Qty ${c.qty}</p>
+                        <p class="text-sm font-bold text-brand-accent mt-1">${c.price * c.qty} DT</p>
+                    </div>
+                    <button onclick="removeFromCart('${c.id}','${c.size}')" class="text-brand-faint hover:text-brand-accent transition-colors self-start">
+                        <span class="iconify text-lg" data-icon="mdi:close"></span>
+                    </button>
+                </div>`).join('');
+            document.getElementById('cartSubtotal').textContent = cartSubtotal() + ' DT';
+            document.getElementById('cartTotal').textContent = (cartSubtotal() + DELIVERY_FEE) + ' DT';
+        }
+
+        function openCart() {
+            document.getElementById('cartOverlay').classList.add('active');
+            document.getElementById('cartDrawer').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCart() {
+            document.getElementById('cartOverlay').classList.remove('active');
+            document.getElementById('cartDrawer').classList.remove('active');
+            if (!document.getElementById('setPage').classList.contains('open')) document.body.style.overflow = '';
+        }
+
+        // ===== BAG CHECKOUT =====
+        function refreshCheckoutSummary() {
+            const sub = cartSubtotal();
+            document.getElementById('checkoutSummaryItems').innerHTML = cart.map(c =>
+                `<div class="flex justify-between"><span class="text-brand-muted">${c.name} (${c.size}) × ${c.qty}</span><span class="text-white font-semibold">${c.price * c.qty} DT</span></div>`).join('');
+            document.getElementById('checkoutDeliveryLine').textContent = currentDeliveryFee === 0 ? 'Free' : currentDeliveryFee + ' DT';
+            document.getElementById('checkoutSummaryTotal').textContent = (sub + currentDeliveryFee) + ' DT';
+        }
+
+        function proceedToCheckout() {
+            if (cart.length === 0) { showToast('Your bag is empty'); return; }
+            closeCart();
+            setTimeout(() => {
+                const modal = document.getElementById('checkoutModal');
+                modal.style.display = 'flex';
+                document.getElementById('checkoutOverlay').classList.add('active');
+                requestAnimationFrame(() => modal.classList.add('active'));
+                document.body.style.overflow = 'hidden';
+                document.getElementById('teboulbaCheck').checked = false;
+                currentDeliveryFee = DELIVERY_FEE;
+                refreshCheckoutSummary();
+            }, 300);
+        }
+
+        function updateDeliveryDisplay() {
+            currentDeliveryFee = document.getElementById('teboulbaCheck').checked ? 0 : DELIVERY_FEE;
+            refreshCheckoutSummary();
+        }
+
+        function closeCheckout() {
+            const modal = document.getElementById('checkoutModal');
+            modal.classList.remove('active');
+            document.getElementById('checkoutOverlay').classList.remove('active');
+            if (!document.getElementById('setPage').classList.contains('open')) document.body.style.overflow = '';
+            setTimeout(() => { modal.style.display = 'none'; }, 400);
+        }
+
+        function placeOrder(e) {
+            e.preventDefault();
+            const btn = document.getElementById('placeOrderBtn');
+            btn.innerHTML = '<span class="iconify animate-spin" data-icon="mdi:loading"></span> Processing...';
+            btn.disabled = true;
+
+            const isTeboulba = document.getElementById('teboulbaCheck').checked;
+            const pm = document.querySelector('input[name="payment"]:checked');
+            const pmLabels = { cod: 'Cash on Delivery', transfer: 'Bank Transfer' };
+            const total = cartSubtotal() + currentDeliveryFee;
+            const orderNum = newOrderNumber();
+            const order = { num: orderNum, name: document.getElementById('shipFirst').value, items: cart.map(c => ({ name: c.name, color: c.color, size: c.size, qty: c.qty, price: c.price })), fee: currentDeliveryFee, total, pay: pmLabels[pm.value] || pm.value, teboulba: isTeboulba };
+
+            const sent = sendOrder({
+                access_key: WEB3FORMS_ACCESS_KEY,
+                subject: `New Order ${orderNum} — HKEYA THE BRAND (Sets)`,
+                from_name: 'HKEYA THE BRAND — Order Notification',
+                order_number: orderNum,
+                customer_name: document.getElementById('shipFirst').value,
+                phone: document.getElementById('shipPhone').value,
+                address: document.getElementById('shipAddress').value + (isTeboulba ? ' (Teboulba — free delivery)' : ''),
+                payment_method: pmLabels[pm.value] || pm.value,
+                items: cart.map(c => `${c.name} — ${c.color} (Size ${c.size}) x${c.qty} — ${c.price * c.qty} DT`).join('\n'),
+                delivery_fee: `${currentDeliveryFee} DT`,
+                total: `${total} DT`
+            });
+            closeCheckout();
+            startReceipt(order, sent);
+            sent.finally(() => {
+                cart = [];
+                updateCartUI();
+                btn.innerHTML = '<span class="iconify" data-icon="mdi:check"></span> Place Order';
+                btn.disabled = false;
+            });
+        }
+
+        function closeConfirm() {
+            rpToken++;
+            rpTimers.forEach(clearTimeout);
+            rpTimers = [];
+            const modal = document.getElementById('confirmModal');
+            modal.classList.remove('active');
+            document.getElementById('confirmOverlay').classList.remove('active');
+            if (!document.getElementById('setPage').classList.contains('open')) document.body.style.overflow = '';
+            setTimeout(() => { modal.style.display = 'none'; }, 400);
+        }
+
+        // ===== CONTACT FORM =====
+        function submitContactForm(e) {
+            e.preventDefault();
+            const form = document.getElementById('contactForm');
+            const btn = document.getElementById('contactSubmitBtn');
+            const originalBtnHTML = btn.innerHTML;
+            btn.innerHTML = '<span class="iconify animate-spin" data-icon="mdi:loading"></span> Sending...';
+            btn.disabled = true;
+
+            fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                    body: JSON.stringify(Object.fromEntries(new FormData(form).entries()))
+                })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        showToast("Message sent — we'll get back to you soon");
+                        form.reset();
+                    } else {
+                        showToast('Something went wrong. Please try again.');
+                    }
+                })
+                .catch(err => {
+                    console.error('Contact form failed to send:', err);
+                    showToast('Something went wrong. Please try again.');
+                })
+                .finally(() => {
+                    btn.innerHTML = originalBtnHTML;
+                    btn.disabled = false;
+                });
+        }
+
+        // ===== TOAST / MENU / NAV =====
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
+        }
+
+        function toggleMobile() {
+            const m = document.getElementById('mobileMenu');
+            m.classList.toggle('open');
+            document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
+        }
+
+        window.addEventListener('scroll', () => {
+            const show = window.scrollY > 100;
+            document.getElementById('navbar').style.transform = show ? 'translateY(0)' : 'translateY(-100%)';
+            document.getElementById('announceBar').style.transform = show ? 'translateY(0)' : 'translateY(-100%)';
+        });
+
+        // ===== HERO ANIMATIONS =====
+        function runHeroIntro() {
+            const reveal = (id, delay) => setTimeout(() => {
+                const el = document.getElementById(id);
+                el.style.transition = 'all .8s cubic-bezier(.25,.46,.45,.94)';
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, delay);
+            reveal('heroTag', 200);
+            setTimeout(() => {
+                document.getElementById('heroLine').classList.add('visible');
+                document.getElementById('heroLine2').classList.add('visible');
+            }, 200);
+            reveal('heroTitle', 400);
+            reveal('heroDesc', 650);
+            reveal('heroBtns', 850);
+            reveal('heroDots', 1050);
+        }
+
+        // ===== LOADER: shows while the page loads (at least ~1.9s), then reveals the hero =====
+        (function() {
+            const el = document.getElementById('loader');
+            const start = Date.now();
+            let done = false;
+            document.body.style.overflow = 'hidden';
+
+            function finish() {
+                if (done) return;
+                done = true;
+                el.classList.add('hide');
+                document.body.style.overflow = '';
+                setTimeout(() => el.remove(), 800);
+                runHeroIntro();
+            }
+
+            function ready() { setTimeout(finish, Math.max(0, 1900 - (Date.now() - start))); }
+            if (document.readyState === 'complete') ready();
+            else window.addEventListener('load', ready);
+            setTimeout(finish, 6000); // safety: never block the site
+        })();
+
+        // ===== SCROLL REVEAL =====
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right, section > div > .line-draw, #about .line-draw, #contact .line-draw').forEach(el => observer.observe(el));
+
+        // ===== CUSTOM CURSOR =====
+        const dot = document.getElementById('cursorDot'),
+            ring = document.getElementById('cursorRing');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            dot.style.left = mx - 4 + 'px';
+            dot.style.top = my - 4 + 'px';
+        });
+        (function animRing() {
+            rx += (mx - rx) * .15;
+            ry += (my - ry) * .15;
+            ring.style.left = rx - 18 + 'px';
+            ring.style.top = ry - 18 + 'px';
+            requestAnimationFrame(animRing);
+        })();
+
+        function bindHoverTargets() {
+            document.querySelectorAll('a, button, .size-btn, .pcard-btn, .hero-dot, .sp-dot, .other-tile, .carousel-arrow, .carousel-dot').forEach(el => {
+                if (el.dataset.hoverBound) return;
+                el.dataset.hoverBound = '1';
+                el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+                el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+            });
+        }
+
+        // ===== PARTICLES: one layer behind the whole site, tinted like the top banner =====
+        const canvas = document.getElementById('particleCanvas'),
+            ctx = canvas.getContext('2d');
+        let particles = [];
+        let pCur = pTarget.slice();
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.6 + .6;
+                this.speedX = (Math.random() - .5) * .3;
+                this.speedY = (Math.random() - .5) * .3;
+                this.opacity = Math.random() * .5 + .25;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+            }
+            draw(c) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${c},${this.opacity})`;
+                ctx.fill();
+            }
+        }
+        for (let i = 0; i < 80; i++) particles.push(new Particle());
+        (function animP() {
+            // ease toward the current banner color
+            for (let k = 0; k < 3; k++) pCur[k] += (pTarget[k] - pCur[k]) * .05;
+            const c = pCur.map(Math.round).join(',');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(c); });
+            for (let i = 0; i < particles.length; i++)
+                for (let j = i + 1; j < particles.length; j++) {
+                    const d = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+                    if (d < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(${c},${.12 * (1 - d / 120)})`;
+                        ctx.lineWidth = .6;
+                        ctx.stroke();
+                    }
+                }
+            requestAnimationFrame(animP);
+        })();
+
+        // ===== SET PAGE: keyboard, back button, swipe down, sticky bar =====
+        const spPage = document.getElementById('setPage');
+
+        document.addEventListener('keydown', e => {
+            const tag = (document.activeElement || {}).tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+            if (!spPage.classList.contains('open')) return;
+            if (e.key === 'ArrowLeft') slideCarousel(-1);
+            if (e.key === 'ArrowRight') slideCarousel(1);
+            if (e.key === 'Escape' && !document.querySelector('.overlay.active')) closeSetPage();
+        });
+
+        // browser / phone back button closes the open set instead of leaving the site
+        window.addEventListener('popstate', () => {
+            if (spPage.classList.contains('open')) closeSetPage(true);
+        });
+
+        // phones: swipe down from the top of the page to close it
+        let swY = 0, swX = 0, swOn = false;
+        spPage.addEventListener('touchstart', e => {
+            swOn = spPage.scrollTop <= 0;
+            swY = e.touches[0].clientY;
+            swX = e.touches[0].clientX;
+        }, { passive: true });
+        spPage.addEventListener('touchend', e => {
+            if (!swOn) return;
+            swOn = false;
+            const t = e.changedTouches[0];
+            const a = document.activeElement;
+            const typing = a && spPage.contains(a) && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName);
+            if (t.clientY - swY > 110 && Math.abs(t.clientX - swX) < 60 && spPage.scrollTop <= 0 && !typing) closeSetPage();
+        }, { passive: true });
+
+        // phones: hide the sticky "Order" bar while the order form is on screen
+        const spCta = document.getElementById('spCta');
+        new IntersectionObserver(en => en.forEach(x => spCta.classList.toggle('hide', x.isIntersecting)), { root: spPage, threshold: 0.15 })
+            .observe(document.getElementById('spOrder'));
+
+        // ===== BACKGROUND SOUNDTRACK =====
+        (function() {
+            const audio = document.getElementById('bgSoundtrack');
+            const toggleBtn = document.getElementById('soundToggle');
+
+            function setIcon(playing) {
+                toggleBtn.querySelector('span').setAttribute('data-icon', playing ? 'mdi:volume-high' : 'mdi:volume-mute');
+                if (window.Iconify) Iconify.scan(toggleBtn);
+            }
+
+            function tryPlay() { audio.play().then(() => setIcon(true)).catch(() => setIcon(false)); }
+            tryPlay();
+
+            const unlock = () => { if (audio.paused) tryPlay(); };
+            document.addEventListener('click', unlock, { once: true });
+            document.addEventListener('touchstart', unlock, { once: true });
+            document.addEventListener('keydown', unlock, { once: true });
+
+            toggleBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                if (audio.paused) tryPlay();
+                else { audio.pause(); setIcon(false); }
+            });
+        })();
+
+        // ===== INIT =====
+        buildStatic();
+        renderSet();
+        updateCartUI();
+        bindHoverTargets();
+    </script>
+</body>
+
+</html>
