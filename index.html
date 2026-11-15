@@ -174,19 +174,11 @@
         .hero-dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .25); cursor: pointer; padding: 0; transition: transform .3s cubic-bezier(.34, 1.56, .64, 1), border-color .3s ease }
         .hero-dot:hover { transform: scale(1.3); border-color: #fff }
 
-        /* ===== PRODUCT GRID: 1 / 2 / 3 columns, last row always centered ===== */
-        .pgrid { display: grid; grid-template-columns: 1fr }
-        @media (min-width: 640px) {
-            .pgrid { grid-template-columns: repeat(2, 1fr) }
-            .pgrid > :last-child:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - 1rem); justify-self: center }
-        }
-        @media (min-width: 1024px) {
-            .pgrid { grid-template-columns: repeat(6, 1fr) }
-            .pgrid > * { grid-column: span 2 }
-            .pgrid > :last-child:nth-child(odd) { grid-column: 4 / span 2; width: auto; justify-self: stretch }
-            .pgrid > :nth-child(4) { grid-column: 2 / span 2 }
-            .pgrid > :nth-child(5) { grid-column: 4 / span 2 }
-        }
+        /* ===== PRODUCT GRID: 1 / 2 / 3 per row, any number of cards, last row centered ===== */
+        .pgrid { --g: 2rem; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--g) }
+        .pgrid > * { width: 100% }
+        @media (min-width: 640px) { .pgrid > * { width: calc((100% - var(--g)) / 2) } }
+        @media (min-width: 1024px) { .pgrid { --g: 2.5rem } .pgrid > * { width: calc((100% - 2 * var(--g)) / 3) } }
 
         /* ===== PRODUCT CARDS (appear one by one on scroll) ===== */
         .pcard { opacity: 0; transform: translateY(70px) scale(.96); filter: blur(6px); transition: opacity .8s ease, transform .9s cubic-bezier(.22, 1, .36, 1), filter .8s ease; transition-delay: var(--d, 0s) }
@@ -561,10 +553,10 @@
             <div class="text-center mb-16 reveal">
                 <span class="text-[10px] font-bold tracking-[.3em] uppercase text-brand-accent">002</span>
                 <h2 class="mt-3 text-4xl sm:text-6xl font-bold tracking-tighter text-white">THE SETS</h2>
-                <p class="mt-4 text-brand-muted text-sm max-w-lg mx-auto">Hoodie + sweatpants. Five colors. Open one to see it in its own world.</p>
+                <p class="mt-4 text-brand-muted text-sm max-w-lg mx-auto">Hoodie + sweatpants in five colors, plus the black top and bottom on their own. Open one to see it in its own world.</p>
                 <div class="flex justify-center mt-6"><div class="line-draw"></div></div>
             </div>
-            <div id="productGrid" class="pgrid gap-8 lg:gap-10"></div>
+            <div id="productGrid" class="pgrid"></div>
         </div>
     </section>
 
@@ -921,14 +913,27 @@
             id: 'black', img: 'black.png', name: 'Black', tone: 'black', hex: '#161616', price: 120,
             sizes: { S: true, M: true, L: true, XL: true },
             theme: { pg: '#0E0E0E', card: '#1A1A1A', card2: '#141414', tx: '#FFFFFF', mu: '#9A9A9A', ac: '#FFFFFF', acfg: '#0E0E0E', bd: 'rgba(255,255,255,.14)' }
+        }, {
+            id: 'top', single: true, img: 'up.png', name: 'Black Top', title: 'BLACK TOP', hex: '#1F1F1F', price: 70,
+            desc: 'Black hoodie, sold on its own. STORY logo on the chest, "WE LIVE موش كيف كيف" printed across the back.',
+            sizes: { S: true, M: true, L: true, XL: true },
+            theme: { pg: '#0E0E0E', card: '#1A1A1A', card2: '#141414', tx: '#FFFFFF', mu: '#9A9A9A', ac: '#FFFFFF', acfg: '#0E0E0E', bd: 'rgba(255,255,255,.14)' }
+        }, {
+            id: 'down', single: true, img: 'down.png', name: 'Black Down', title: 'BLACK DOWN', hex: '#0A0A0A', price: 60,
+            desc: 'Black baggy sweatpants, sold on their own. STORY logo on the leg.',
+            sizes: { S: true, M: true, L: true, XL: true },
+            theme: { pg: '#0E0E0E', card: '#1A1A1A', card2: '#141414', tx: '#FFFFFF', mu: '#9A9A9A', ac: '#FFFFFF', acfg: '#0E0E0E', bd: 'rgba(255,255,255,.14)' }
         }];
         // PHOTOS: each set has its own `img:` path above — change it if your files live elsewhere
         // (e.g. 'images/ash.png' or a full https:// link). Want a swipeable gallery? Add `extra: ['images/ash-back.png']` to that set.
         SETS.forEach(s => {
-            s.desc = `Hoodie and baggy sweatpants in ${s.tone}. STORY logo on the chest, "WE LIVE موش كيف كيف" printed across the back.`;
+            s.title = s.title || 'SET ' + s.name.toUpperCase();
+            s.color = s.single ? 'Black' : s.name;
+            s.desc = s.desc || `Hoodie and baggy sweatpants in ${s.tone}. STORY logo on the chest, "WE LIVE موش كيف كيف" printed across the back.`;
             s.imgs = [s.img].concat(s.extra || []);
         });
 
+        const COLOR_COUNT = SETS.filter(x => !x.single).length;
         const DELIVERY_FEE = 9;
         const WEB3FORMS_ACCESS_KEY = 'e4b334f2-41cb-4200-ac0e-76692cfda8f5';
 
@@ -976,7 +981,7 @@
         // shown in the set's own color until its photo exists
         function placeholder(s) {
             return `<div class="ph" style="background:linear-gradient(160deg,${shade(s.hex, .18)},${s.hex} 60%,${shade(s.hex, -.2)});color:${ink(s.hex)}">
-                <span class="ph-name">SET ${s.name.toUpperCase()}</span>
+                <span class="ph-name">${s.title}</span>
                 <span class="ph-sub">Photo coming soon</span>
             </div>`;
         }
@@ -1002,7 +1007,7 @@
             bar.style.background = s.hex;
             pTarget = particleTint(s.hex);
             bar.style.color = ink(s.hex);
-            const msg = `DROP 02 — SET ${s.name.toUpperCase()} — ${s.price} DT — 9 DT DELIVERY — ${SETS.length} COLORS — LIMITED EDITION — HKEYA THE BRAND — `.repeat(3);
+            const msg = `DROP 02 — ${s.title} — ${s.price} DT — 9 DT DELIVERY — ${COLOR_COUNT} COLORS — LIMITED EDITION — HKEYA THE BRAND — `.repeat(3);
             document.querySelectorAll('.bn-text').forEach(el => el.textContent = msg);
         }
 
@@ -1018,9 +1023,9 @@
             document.getElementById('marqueeTrack').innerHTML = span + span;
             setBanner(0);
 
-            document.getElementById('aboutBox').style.background = 'linear-gradient(90deg,' + SETS.map((x, i) => `${x.hex} ${i * 100 / SETS.length}% ${(i + 1) * 100 / SETS.length}%`).join(',') + ')';
+            document.getElementById('aboutBox').style.background = 'linear-gradient(90deg,' + SETS.filter(x => !x.single).map((x, i, a) => `${x.hex} ${i * 100 / a.length}% ${(i + 1) * 100 / a.length}%`).join(',') + ')';
 
-            document.getElementById('heroDots').innerHTML = SETS.map((s, i) =>
+            document.getElementById('heroDots').innerHTML = SETS.map((s, i) => s.single ? '' :
                 `<button class="hero-dot" style="background:${s.hex}" onmouseenter="setBanner(${i},true)" onclick="openSetPage(${i},event)" aria-label="Open set ${s.name}" title="${s.name}"></button>`).join('');
 
             // Product cards — revealed one by one while scrolling
@@ -1035,7 +1040,7 @@
                         <div class="pcard-bar"></div>
                         <div class="p-5">
                             <div class="flex items-center justify-between gap-3">
-                                <h3 class="text-xl font-bold tracking-tight text-white">SET ${s.name.toUpperCase()}</h3>
+                                <h3 class="text-xl font-bold tracking-tight text-white">${s.title}</h3>
                                 <span class="w-5 h-5 rounded-full border border-white/20 flex-shrink-0" style="background:${s.hex}"></span>
                             </div>
                             <div class="mt-3 flex items-center justify-between">
@@ -1120,12 +1125,12 @@
             const banner = document.getElementById('spBanner');
             banner.style.background = `linear-gradient(180deg, ${shade(s.hex, .12)} 0%, ${th.pg} 100%)`;
             banner.style.color = th.tx;
-            document.getElementById('spBannerTitle').textContent = 'SET ' + s.name.toUpperCase();
+            document.getElementById('spBannerTitle').textContent = s.title;
             document.getElementById('spBannerNo').textContent = '0' + (currentSet + 1);
-            document.getElementById('spBannerTag').textContent = `Drop 02 — Set 0${currentSet + 1} / 0${SETS.length}`;
+            document.getElementById('spBannerTag').textContent = `Drop 02 — ${s.single ? 'Piece' : 'Set'} 0${currentSet + 1} / 0${SETS.length}`;
             document.getElementById('setPrice').textContent = s.price + ' DT';
             document.getElementById('setDesc').textContent = s.desc;
-            document.getElementById('spCtaName').textContent = 'SET ' + s.name.toUpperCase();
+            document.getElementById('spCtaName').textContent = s.title;
             document.getElementById('spCtaPrice').textContent = s.price + ' DT';
 
             document.querySelectorAll('.sp-dot').forEach((el, i) => el.classList.toggle('active', i === currentSet));
@@ -1201,7 +1206,7 @@
             const s = SETS[currentSet];
             const fee = document.getElementById('spTeboulba').checked ? 0 : DELIVERY_FEE;
             const sub = s.price * quantity;
-            document.getElementById('spSumItem').textContent = `SET ${s.name.toUpperCase()} · ${selectedSize} × ${quantity}`;
+            document.getElementById('spSumItem').textContent = `${s.title} · ${selectedSize} × ${quantity}`;
             document.getElementById('spSumItemPrice').textContent = sub + ' DT';
             document.getElementById('spSumDelivery').textContent = fee === 0 ? 'Free' : fee + ' DT';
             document.getElementById('spSumTotal').textContent = (sub + fee) + ' DT';
@@ -1311,7 +1316,7 @@
             const pm = document.querySelector('input[name="spPay"]:checked');
             const pmLabels = { cod: 'Cash on Delivery', transfer: 'Bank Transfer' };
             const orderNum = newOrderNumber();
-            const order = { num: orderNum, name: document.getElementById('spName').value, items: [{ name: 'SET ' + s.name.toUpperCase(), color: s.name, size: selectedSize, qty: quantity, price: s.price }], fee, total: sub + fee, pay: pmLabels[pm.value] || pm.value, teboulba: isTeboulba };
+            const order = { num: orderNum, name: document.getElementById('spName').value, items: [{ name: s.title, color: s.color, size: selectedSize, qty: quantity, price: s.price }], fee, total: sub + fee, pay: pmLabels[pm.value] || pm.value, teboulba: isTeboulba };
 
             const sent = sendOrder({
                 access_key: WEB3FORMS_ACCESS_KEY,
@@ -1322,7 +1327,7 @@
                 phone: document.getElementById('spPhone').value,
                 address: document.getElementById('spAddress').value + (isTeboulba ? ' (Teboulba — free delivery)' : ''),
                 payment_method: pmLabels[pm.value] || pm.value,
-                items: `SET ${s.name.toUpperCase()} — ${s.name} (Size ${selectedSize}) x${quantity} — ${sub} DT`,
+                items: `${s.title} — ${s.color} (Size ${selectedSize}) x${quantity} — ${sub} DT`,
                 delivery_fee: `${fee} DT`,
                 total: `${sub + fee} DT`
             });
@@ -1344,9 +1349,9 @@
             if (!s.sizes[selectedSize]) { showToast('That size is sold out'); return; }
             const existing = cart.find(c => c.id === s.id && c.size === selectedSize);
             if (existing) existing.qty += quantity;
-            else cart.push({ id: s.id, name: 'SET ' + s.name.toUpperCase(), color: s.name, hex: s.hex, size: selectedSize, qty: quantity, price: s.price });
+            else cart.push({ id: s.id, name: s.title, color: s.color, hex: s.hex, size: selectedSize, qty: quantity, price: s.price });
             updateCartUI();
-            showToast(`SET ${s.name.toUpperCase()} (${selectedSize}) × ${quantity} added to bag`);
+            showToast(`${s.title} (${selectedSize}) × ${quantity} added to bag`);
         }
 
         function removeFromCart(id, size) {
