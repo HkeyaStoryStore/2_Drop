@@ -939,48 +939,37 @@
 
     <!-- ========== JAVASCRIPT ========== -->
     <script>
-        // Check for custom data in localStorage
-        let SETS = JSON.parse(localStorage.getItem('hkeya_products'));
-        if (!SETS) {
-            SETS = [{
-                id: 'violet', img: 'violet.png', name: 'Violet', tone: 'violet', hex: '#C27DF1', price: 120,
-                sizes: { S: true, M: true, L: true },
-                theme: { pg: '#C27DF1', card: '#D1A0F6', card2: '#CA8FF3', tx: '#2A0A44', mu: '#5B2D80', ac: '#2A0A44', acfg: '#F3E0FF', bd: 'rgba(42,10,68,.2)' }
-            }, {
-                id: 'bordeaux', img: 'bordeaux.png', name: 'Bordeaux', tone: 'bordeaux', hex: '#611C31', price: 120,
-                sizes: { S: true, M: true, L: true },
-                theme: { pg: '#611C31', card: '#74293F', card2: '#6B2236', tx: '#FFF0F4', mu: '#E0AFC0', ac: '#FFE97A', acfg: '#4B1226', bd: 'rgba(255,255,255,.16)' }
-            }, {
-                id: 'sun', img: 'yellow.png', name: 'Sun', tone: 'sun yellow', hex: '#FDDA58', price: 120,
-                sizes: { S: true, M: true, L: true },
-                theme: { pg: '#FDDA58', card: '#FFE787', card2: '#FFE170', tx: '#0F2A6B', mu: '#3D5599', ac: '#1649C0', acfg: '#FFF3B8', bd: 'rgba(15,42,107,.22)' }
-            }, {
-                id: 'charcoal', img: 'charcoal.png', name: 'Charcoal', tone: 'charcoal', hex: '#3A3B3A', price: 120,
-                sizes: { S: true, M: true, L: true },
-                theme: { pg: '#2B2C2B', card: '#383938', card2: '#323332', tx: '#F1F1F1', mu: '#A9ABA9', ac: '#3B74FF', acfg: '#FFFFFF', bd: 'rgba(255,255,255,.14)' }
-            }, {
-                id: 'black', img: 'black.png', name: 'Black', tone: 'black', hex: '#161616', price: 120,
-                sizes: { S: true, M: true, L: true },
-                theme: { pg: '#0E0E0E', card: '#1A1A1A', card2: '#141414', tx: '#FFFFFF', mu: '#9A9A9A', ac: '#FFFFFF', acfg: '#0E0E0E', bd: 'rgba(255,255,255,.14)' }
-            }, {
-                id: 'top', single: true, img: 'up.png', name: 'Black Top', title: 'BLACK TOP', hex: '#1F1F1F', price: 70,
-                desc: 'Black hoodie, sold on its own. STORY logo on the chest, "WE LIVE موش كيف كيف" printed across the back.',
-                sizes: { S: true, M: true, L: true },
-                theme: { pg: '#0E0E0E', card: '#1A1A1A', card2: '#141414', tx: '#FFFFFF', mu: '#9A9A9A', ac: '#FFFFFF', acfg: '#0E0E0E', bd: 'rgba(255,255,255,.14)' }
-            }, {
-                id: 'down', single: true, img: 'down.png', name: 'Black Down', title: 'BLACK DOWN', hex: '#0A0A0A', price: 60,
-                desc: 'Black baggy sweatpants, sold on their own. STORY logo on the leg.',
-                sizes: { S: true, M: true, L: true },
-                theme: { pg: '#0E0E0E', card: '#1A1A1A', card2: '#141414', tx: '#FFFFFF', mu: '#9A9A9A', ac: '#FFFFFF', acfg: '#0E0E0E', bd: 'rgba(255,255,255,.14)' }
-            }];
-        }
         // ===== PRODUCT DATA LOAD =====
         let SETS = [];
         async function loadProducts() {
             try {
-                const response = await fetch('products.json');
-                const data = await response.json();
-                // Merge static theme data (not in JSON)
+                let data;
+                try {
+                    const response = await fetch('products.json?t=' + Date.now());
+                    if (response.ok) {
+                        data = await response.json();
+                    }
+                } catch (fetchErr) {
+                    console.warn("Could not fetch products.json, trying localStorage", fetchErr);
+                }
+
+                if (!data) {
+                    data = JSON.parse(localStorage.getItem('hkeya_products'));
+                }
+
+                if (!data) {
+                    // Final fallback to defaults
+                    data = [
+                        { "id": "violet", "name": "Violet", "price": 120, "sizes": { "S": true, "M": true, "L": true } },
+                        { "id": "bordeaux", "name": "Bordeaux", "price": 120, "sizes": { "S": true, "M": true, "L": true } },
+                        { "id": "sun", "name": "Sun", "price": 120, "sizes": { "S": true, "M": true, "L": true } },
+                        { "id": "charcoal", "name": "Charcoal", "price": 120, "sizes": { "S": true, "M": true, "L": true } },
+                        { "id": "black", "name": "Black", "price": 120, "sizes": { "S": true, "M": true, "L": true } },
+                        { "id": "top", "name": "Black Top", "price": 70, "sizes": { "S": true, "M": true, "L": true } },
+                        { "id": "down", "name": "Black Down", "price": 60, "sizes": { "S": true, "M": true, "L": true } }
+                    ];
+                }
+
                 const themes = {
                     violet: { pg: '#C27DF1', card: '#D1A0F6', card2: '#CA8FF3', tx: '#2A0A44', mu: '#5B2D80', ac: '#2A0A44', acfg: '#F3E0FF', bd: 'rgba(42,10,68,.2)' },
                     bordeaux: { pg: '#611C31', card: '#74293F', card2: '#6B2236', tx: '#FFF0F4', mu: '#E0AFC0', ac: '#FFE97A', acfg: '#4B1226', bd: 'rgba(255,255,255,.16)' },
@@ -992,7 +981,6 @@
                 };
 
                 SETS = data.map(s => {
-                    // Inject static meta based on ID
                     const base = {
                         violet: { img: 'violet.png', tone: 'violet', hex: '#C27DF1' },
                         bordeaux: { img: 'bordeaux.png', tone: 'bordeaux', hex: '#611C31' },
@@ -1001,24 +989,23 @@
                         black: { img: 'black.png', tone: 'black', hex: '#161616' },
                         top: { img: 'up.png', title: 'BLACK TOP', hex: '#1F1F1F', single: true, desc: 'Black hoodie, sold on its own. STORY logo on the chest, "WE LIVE موش كيف كيف" printed across the back.' },
                         down: { img: 'down.png', title: 'BLACK DOWN', hex: '#0A0A0A', single: true, desc: 'Black baggy sweatpants, sold on their own. STORY logo on the leg.' }
-                    }[s.id];
-                    return { ...s, ...base, theme: themes[s.id] };
+                    }[s.id] || {};
+                    return { ...s, ...base, theme: themes[s.id] || themes.black };
                 });
 
                 SETS.forEach(s => {
-                    s.title = s.title || 'SET ' + s.name.toUpperCase();
+                    s.title = s.title || 'SET ' + (s.name ? s.name.toUpperCase() : 'UNKNOWN');
                     s.color = s.single ? 'Black' : s.name;
-                    s.desc = s.desc || `Hoodie and baggy sweatpants in ${s.tone}. STORY logo on the chest, "WE LIVE موش كيف كيف" printed across the back.`;
+                    s.desc = s.desc || `Hoodie and baggy sweatpants in ${s.tone || 'black'}. STORY logo on the chest, "WE LIVE موش كيف كيف" printed across the back.`;
                     s.imgs = [s.img].concat(s.extra || []);
                 });
 
-                // Initialize the rest of the site after data load
                 buildStatic();
                 renderSet();
                 updateCartUI();
                 bindHoverTargets();
             } catch (e) {
-                console.error("Failed to load products.json", e);
+                console.error("Critical error in loadProducts:", e);
             }
         }
         loadProducts();

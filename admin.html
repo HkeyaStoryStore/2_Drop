@@ -80,33 +80,38 @@
 
         async function init() {
             try {
-                // Try fetching from GitHub first (always gives the live version)
-                const fileResp = await fetch(`https://api.github.com/repos/${GITHUB.owner}/${GITHUB.repo}/contents/${GITHUB.path}`, {
-                    headers: { 'Authorization': `token ${GITHUB.token}` }
-                });
+                // IMPORTANT: Since you are running locally as a file,
+                // we will use the local file first, then fall back to GitHub.
+                let data;
+                try {
+                    const resp = await fetch('products.json?t=' + Date.now());
+                    if (resp.ok) {
+                        data = await resp.json();
+                    }
+                } catch(e) {
+                    console.log("Local fetch failed, trying GitHub API");
+                }
 
-                if (fileResp.ok) {
+                if (!data) {
+                    // Fallback to GitHub API (if token is valid)
+                    const fileResp = await fetch(`https://api.github.com/repos/${GITHUB.owner}/${GITHUB.repo}/contents/${GITHUB.path}`, {
+                        headers: { 'Authorization': 'token ' + GITHUB.token }
+                    });
+                    if (!fileResp.ok) throw new Error("Could not fetch data from anywhere.");
                     const fileData = await fileResp.json();
                     const content = decodeURIComponent(escape(atob(fileData.content)));
-                    products = JSON.parse(content);
-                    render();
-                    console.log("Loaded from GitHub");
-                } else {
-                    // Fallback to local fetch
-                    const resp = await fetch('products.json?t=' + Date.now());
-                    if (!resp.ok) throw new Error("Local load failed");
-                    products = await resp.json();
-                    render();
-                    console.log("Loaded locally");
+                    data = JSON.parse(content);
                 }
+
+                products = data;
+                render();
             } catch (e) {
                 console.error(e);
                 document.getElementById('adminList').innerHTML = `
                     <div class="col-span-full p-8 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-center">
                         <span class="iconify text-3xl mb-2 mx-auto" data-icon="mdi:alert-circle"></span>
                         <p class="font-bold">Initialization Error</p>
-                        <p class="text-xs mt-1 opacity-70">${e.message === 'Local load failed' ? 'Could not reach GitHub or find products.json' : e.message}</p>
-                        <p class="text-[10px] mt-4 uppercase tracking-widest opacity-50">Note: Browser security might block local files. Try hosting it or check your internet.</p>
+                        <p class="text-xs mt-1 opacity-70">${e.message}</p>
                     </div>`;
             }
         }
