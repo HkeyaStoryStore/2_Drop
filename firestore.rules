@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /stock/{id} {
+      allow read: if true;
+      // ADMIN: only the owner account can create/edit anything (stock, prices)
+      allow create, update, delete: if request.auth != null
+        && request.auth.token.email == 'OWNER_EMAIL_HERE';
+      // SITE (visitors): can only LOWER a size's stock, never below 0, never touch price
+      allow update: if request.resource.data.keys().hasOnly(resource.data.keys())
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['S','M','L'])
+        && ('S' in request.resource.data ? request.resource.data.S >= 0 && request.resource.data.S <= resource.data.S : true)
+        && ('M' in request.resource.data ? request.resource.data.M >= 0 && request.resource.data.M <= resource.data.M : true)
+        && ('L' in request.resource.data ? request.resource.data.L >= 0 && request.resource.data.L <= resource.data.L : true);
+    }
+  }
+}
