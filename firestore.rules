@@ -5,7 +5,7 @@ service cloud.firestore {
       allow read: if true;
       // ADMIN: only the owner account can create/edit anything (stock, prices)
       allow create, update, delete: if request.auth != null
-        && request.auth.token.email == 'OWNER_EMAIL_HERE';
+        && request.auth.token.email == 'story.ferr@gmail.com';
       // SITE (visitors): can only LOWER a size's stock, never below 0, never touch price
       allow update: if request.resource.data.keys().hasOnly(resource.data.keys())
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['S','M','L'])
