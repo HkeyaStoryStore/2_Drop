@@ -1,0 +1,9 @@
+[
+    { "id": "violet", "name": "Violet", "price": 120, "sizes": { "S": true, "M": true, "L": true } },
+    { "id": "bordeaux", "name": "Bordeaux", "price": 120, "sizes": { "S": true, "M": true, "L": true } },
+    { "id": "sun", "name": "Sun", "price": 120, "sizes": { "S": true, "M": true, "L": true } },
+    { "id": "charcoal", "name": "Charcoal", "price": 120, "sizes": { "S": true, "M": true, "L": true } },
+    { "id": "black", "name": "Black", "price": 120, "sizes": { "S": true, "M": true, "L": true } },
+    { "id": "top", "name": "Black Top", "price": 70, "sizes": { "S": true, "M": true, "L": true } },
+    { "id": "down", "name": "Black Down", "price": 60, "sizes": { "S": true, "M": true, "L": true } }
+]
