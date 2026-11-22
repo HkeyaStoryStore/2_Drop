@@ -2026,7 +2026,7 @@
             }
             function loadOrders() {
                 $a('aorders').innerHTML = '<div class="c" style="color:#8b95a1">Loading…</div>';
-                fetch(`https://firestore.googleapis.com/v1/${FS_ROOT()}/orders?pageSize=100&orderBy=created%20desc&key=${FB_API_KEY}`, { headers: { Authorization: 'Bearer ' + TOKEN } })
+                fetch(`https://firestore.googleapis.com/v1/${FS_ROOT()}/orders?pageSize=100&key=${FB_API_KEY}`, { headers: { Authorization: 'Bearer ' + TOKEN } })
                     .then(r => r.json()).then(j => {
                         if (j.error) return say($a('agmsg'), 'Orders: ' + j.error.message, 'bad');
                         const docs = (j.documents || []).map(d => {
@@ -2035,7 +2035,7 @@
                                 items: ((f.items || {}).arrayValue || {}).values ? f.items.arrayValue.values.map(v => { const m = v.mapValue.fields; return { id: val(m.id), name: val(m.name), color: val(m.color), size: val(m.size), qty: val(m.qty), price: val(m.price) }; }) : [] };
                             ORD[o.id] = o; return o;
                         });
-                        docs.sort((a, b) => (a.status === 'pending' ? 0 : 1) - (b.status === 'pending' ? 0 : 1));
+                        docs.sort((a, b) => ((a.status === 'pending' ? 0 : 1) - (b.status === 'pending' ? 0 : 1)) || String(b.created).localeCompare(String(a.created)));
                         const pend = docs.filter(o => o.status === 'pending').length;
                         $a('atabo').textContent = 'Orders' + (pend ? ` (${pend})` : '');
                         $a('aorders').innerHTML = docs.length ? docs.map(o => {
