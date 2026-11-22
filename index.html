@@ -1041,9 +1041,30 @@
             });
         }
 
-        // Atomically subtracts the ordered quantities. Resolves true if the order may go through.
-        function reserveStock(items) {
+        // Visitor side: saves the order as PENDING (stock is NOT reduced until you confirm it in #admin).
+        function recordOrder(items, info) {
             if (!stockOn()) return Promise.resolve(true);
+            const short = items.find(i => STOCK[i.id] && STOCK[i.id][i.size] !== undefined && STOCK[i.id][i.size] < i.qty);
+            if (short) {
+                showToast(`Only ${STOCK[short.id][short.size]} left in size ${short.size} — lower the quantity`);
+                return Promise.resolve(false);
+            }
+            const I = n => ({ integerValue: String(n) }), S = v => ({ stringValue: String(v) });
+            const fields = {
+                num: S(info.num), name: S(info.name), phone: S(info.phone), address: S(info.address), pay: S(info.pay),
+                fee: I(info.fee), total: I(info.total), teboulba: { booleanValue: !!info.teboulba },
+                status: S('pending'), created: { timestampValue: new Date().toISOString() },
+                items: { arrayValue: { values: items.map(i => ({ mapValue: { fields: { id: S(i.id), name: S(i.name), color: S(i.color), size: S(i.size), qty: I(i.qty), price: I(i.price) } } })) } }
+            };
+            return fetch(`https://firestore.googleapis.com/v1/${FS_ROOT()}/orders?documentId=${encodeURIComponent(info.num)}&key=${FB_API_KEY}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields })
+                })
+                .then(r => { if (!r.ok) r.json().then(j => console.warn('Order not saved:', j.error)); return true; })
+                .catch(err => { console.warn('Order not saved:', err); return true; }); // never lose the order email
+        }
+
+        // Admin side: atomically subtracts the quantities (plus any extra writes, e.g. marking the order confirmed).
+        function commitStock(items, token, extraWrites) {
             const byId = {};
             items.forEach(i => {
                 const list = byId[i.id] = byId[i.id] || {};
@@ -1056,24 +1077,15 @@
                     fieldTransforms: Object.entries(byId[id]).map(([size, q]) => ({ fieldPath: size, increment: { integerValue: String(-q) } }))
                 },
                 currentDocument: { exists: true }
-            }));
+            })).concat(extraWrites || []);
             return fetch(`https://firestore.googleapis.com/v1/${FS_ROOT()}:commit?key=${FB_API_KEY}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
                     body: JSON.stringify({ writes })
                 })
                 .then(r => r.json().then(j => ({ ok: r.ok, j })))
                 .then(({ ok, j }) => {
-                    if (!ok) {
-                        console.warn('Stock update refused:', j.error);
-                        const st = j.error && j.error.status;
-                        if (st === 'PERMISSION_DENIED' || st === 'FAILED_PRECONDITION' || st === 'NOT_FOUND') {
-                            showToast('Not enough stock — lower the quantity or pick another size');
-                            loadStock();
-                            return false;
-                        }
-                        return true; // unknown error: don't lose the order
-                    }
+                    if (!ok) return { ok: false, error: (j.error && j.error.message) || 'refused' };
                     ids.forEach((id, n) => {
                         const sizes = Object.keys(byId[id]);
                         const res = (j.writeResults[n] || {}).transformResults || [];
@@ -1087,9 +1099,9 @@
                     });
                     applyStock();
                     renderSet();
-                    return true;
+                    return { ok: true };
                 })
-                .catch(err => { console.warn('Stock update failed:', err); return true; });
+                .catch(() => ({ ok: false, error: 'Network error' }));
         }
 
         let currentSet = 0;
@@ -1487,7 +1499,7 @@
             const orderNum = newOrderNumber();
             const order = { num: orderNum, name: document.getElementById('spName').value, items: [{ name: s.title, color: s.color, size: selectedSize, qty: quantity, price: s.price }], fee, total: sub + fee, pay: pmLabels[pm.value] || pm.value, teboulba: isTeboulba };
 
-            reserveStock([{ id: s.id, size: selectedSize, qty: quantity }]).then(ok => {
+            recordOrder([{ id: s.id, name: s.title, color: s.color, size: selectedSize, qty: quantity, price: s.price }], { num: orderNum, name: document.getElementById('spName').value, phone: document.getElementById('spPhone').value, address: document.getElementById('spAddress').value, pay: pmLabels[pm.value] || pm.value, fee, total: sub + fee, teboulba: isTeboulba }).then(ok => {
             if (!ok) { btn.innerHTML = '<span class="iconify" data-icon="mdi:check"></span> Place Order'; btn.disabled = false; return; }
             const sent = sendOrder({
                 access_key: WEB3FORMS_ACCESS_KEY,
@@ -1631,7 +1643,7 @@
             const orderNum = newOrderNumber();
             const order = { num: orderNum, name: document.getElementById('shipFirst').value, items: cart.map(c => ({ name: c.name, color: c.color, size: c.size, qty: c.qty, price: c.price })), fee: currentDeliveryFee, total, pay: pmLabels[pm.value] || pm.value, teboulba: isTeboulba };
 
-            reserveStock(cart.map(c => ({ id: c.id, size: c.size, qty: c.qty }))).then(ok => {
+            recordOrder(cart.map(c => ({ id: c.id, name: c.name, color: c.color, size: c.size, qty: c.qty, price: c.price })), { num: orderNum, name: document.getElementById('shipFirst').value, phone: document.getElementById('shipPhone').value, address: document.getElementById('shipAddress').value, pay: pmLabels[pm.value] || pm.value, fee: currentDeliveryFee, total, teboulba: isTeboulba }).then(ok => {
             if (!ok) { btn.innerHTML = '<span class="iconify" data-icon="mdi:check"></span> Place Order'; btn.disabled = false; return; }
             const sent = sendOrder({
                 access_key: WEB3FORMS_ACCESS_KEY,
@@ -1942,14 +1954,16 @@
                     <input id="apw" type="password" placeholder="Password" autocomplete="current-password"><div style="height:14px"></div>
                     <button id="ago" style="width:100%">Sign in</button> <button class="g" id="aclose0" style="width:100%;margin-top:8px">Close</button>
                     <div id="amsg" style="font-size:12px;margin-top:8px"></div></div>
-                  <div id="apanel" style="display:none">
+                  <div id="apanel" style="display:none"><div style="max-width:760px;margin:0 auto 12px;display:flex;gap:8px"><button class="g" id="atabo">Orders</button><button class="g" id="atabs">Stock &amp; prices</button></div>
                     <div style="display:flex;justify-content:space-between;align-items:center;max-width:760px;margin:0 auto 12px"><h2 style="margin:0;letter-spacing:.2em;color:#E3B76B;font-size:16px">STOCK &amp; PRICES</h2><button class="g" id="aclose">Sign out</button></div>
-                    <div class="c h" style="padding:10px 14px"><div class="r h"><span>PRODUCT</span><span>PRICE DT</span><span>S</span><span>M</span><span>L</span><span></span></div></div>
-                    <div id="alist"></div><div id="agmsg" style="max-width:760px;margin:0 auto;font-size:12px"></div></div></div>`;
+                    <div id="ahead" class="c h" style="padding:10px 14px"><div class="r h"><span>PRODUCT</span><span>PRICE DT</span><span>S</span><span>M</span><span>L</span><span></span></div></div>
+                    <div id="aorders"></div><div id="alist"></div><div id="agmsg" style="max-width:760px;margin:0 auto;font-size:12px"></div></div></div>`;
                 document.body.appendChild(box);
                 $a('ago').onclick = login;
                 $a('apw').onkeydown = e => { if (e.key === 'Enter') login(); };
                 $a('aclose0').onclick = $a('aclose').onclick = close;
+                $a('atabo').onclick = () => tab('o');
+                $a('atabs').onclick = () => tab('s');
             }
             function open() {
                 if (!stockOn()) { showToast('Add FB_PROJECT_ID and FB_API_KEY first'); return; }
@@ -1972,7 +1986,7 @@
                     TOKEN = j.idToken;
                     $a('alogin').style.display = 'none'; $a('apanel').style.display = '';
                     timer = setTimeout(() => { close(); showToast('Admin session expired'); }, 55 * 60 * 1000);
-                    list();
+                    list(); tab('o');
                 }).catch(() => say($a('amsg'), 'Network error', 'bad'));
             }
             function list() {
@@ -2001,6 +2015,65 @@
                     say($a('agmsg'), ok ? `${id} saved ✓` : `Refused: ${(j.error && j.error.message) || 'check rules / owner email'}`, ok ? 'ok' : 'bad');
                     if (ok) loadStock();
                 }).catch(() => say($a('agmsg'), 'Network error', 'bad'));
+            }
+
+            const ORD = {};
+            const val = f => f && (f.stringValue !== undefined ? f.stringValue : f.integerValue !== undefined ? parseInt(f.integerValue, 10) : f.timestampValue !== undefined ? f.timestampValue : f.booleanValue);
+            function tab(w) {
+                $a('aorders').style.display = w === 'o' ? '' : 'none';
+                $a('alist').style.display = $a('ahead').style.display = w === 's' ? '' : 'none';
+                if (w === 'o') loadOrders();
+            }
+            function loadOrders() {
+                $a('aorders').innerHTML = '<div class="c" style="color:#8b95a1">Loading…</div>';
+                fetch(`https://firestore.googleapis.com/v1/${FS_ROOT()}/orders?pageSize=100&orderBy=created%20desc&key=${FB_API_KEY}`, { headers: { Authorization: 'Bearer ' + TOKEN } })
+                    .then(r => r.json()).then(j => {
+                        if (j.error) return say($a('agmsg'), 'Orders: ' + j.error.message, 'bad');
+                        const docs = (j.documents || []).map(d => {
+                            const f = d.fields || {};
+                            const o = { id: d.name.split('/').pop(), name: val(f.name), phone: val(f.phone), address: val(f.address), pay: val(f.pay), total: val(f.total), fee: val(f.fee), status: val(f.status), created: val(f.created),
+                                items: ((f.items || {}).arrayValue || {}).values ? f.items.arrayValue.values.map(v => { const m = v.mapValue.fields; return { id: val(m.id), name: val(m.name), color: val(m.color), size: val(m.size), qty: val(m.qty), price: val(m.price) }; }) : [] };
+                            ORD[o.id] = o; return o;
+                        });
+                        docs.sort((a, b) => (a.status === 'pending' ? 0 : 1) - (b.status === 'pending' ? 0 : 1));
+                        const pend = docs.filter(o => o.status === 'pending').length;
+                        $a('atabo').textContent = 'Orders' + (pend ? ` (${pend})` : '');
+                        $a('aorders').innerHTML = docs.length ? docs.map(o => {
+                            const col = o.status === 'pending' ? '#E3B76B' : o.status === 'confirmed' ? '#7ee2a1' : '#ff8a8a';
+                            return `<div class="c"><div style="display:flex;justify-content:space-between;gap:8px;font-weight:700"><span>${esc(o.id)} · ${esc(o.name)}</span><span style="color:${col};text-transform:uppercase;font-size:11px;letter-spacing:.1em">${esc(o.status)}</span></div>
+                                <div style="color:#8b95a1;font-size:12px;margin:4px 0">${esc(o.phone)} · ${esc(o.address)} · ${esc(o.pay)} · ${new Date(o.created).toLocaleString()}</div>
+                                <div>${o.items.map(i => `${esc(i.name)} ${esc(i.color)} (${esc(i.size)}) × ${i.qty}`).join('<br>')}</div>
+                                <div style="margin-top:6px;font-weight:700">${o.total} DT</div>
+                                ${o.status === 'pending' ? `<div style="display:flex;gap:8px;margin-top:10px"><button data-ok="${esc(o.id)}">Confirm</button><button class="g" data-no="${esc(o.id)}">Reject</button></div>` : ''}</div>`;
+                        }).join('') : '<div class="c" style="color:#8b95a1">No orders yet</div>';
+                        $a('aorders').querySelectorAll('[data-ok]').forEach(b => b.onclick = () => confirmOrder(b, b.dataset.ok));
+                        $a('aorders').querySelectorAll('[data-no]').forEach(b => b.onclick = () => rejectOrder(b, b.dataset.no));
+                    }).catch(() => say($a('agmsg'), 'Could not load orders', 'bad'));
+            }
+            function setStatus(id, st) {
+                return fetch(`https://firestore.googleapis.com/v1/${FS_ROOT()}/orders/${encodeURIComponent(id)}?updateMask.fieldPaths=status&key=${FB_API_KEY}`, {
+                    method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+                    body: JSON.stringify({ fields: { status: { stringValue: st } } })
+                }).then(r => r.ok);
+            }
+            function rejectOrder(btn, id) {
+                if (!confirm('Reject order ' + id + '? Stock will not change.')) return;
+                btn.disabled = true;
+                setStatus(id, 'cancelled').then(ok => { say($a('agmsg'), ok ? `${id} rejected` : 'Could not update', ok ? 'ok' : 'bad'); loadOrders(); });
+            }
+            function confirmOrder(btn, id) {
+                btn.disabled = true;
+                const o = ORD[id];
+                fetch(`https://firestore.googleapis.com/v1/${FS_ROOT()}/orders/${encodeURIComponent(id)}?key=${FB_API_KEY}`, { headers: { Authorization: 'Bearer ' + TOKEN } })
+                    .then(r => r.json()).then(d => {
+                        if (val((d.fields || {}).status) !== 'pending') { say($a('agmsg'), 'Order already handled', 'bad'); return loadOrders(); }
+                        return loadStock().then(() => {
+                            const lack = o.items.find(i => (STOCK[i.id] ? STOCK[i.id][i.size] : 0) < i.qty);
+                            if (lack) { say($a('agmsg'), `Not enough stock: ${lack.name} (${lack.size}) has ${STOCK[lack.id] ? STOCK[lack.id][lack.size] : 0}, order needs ${lack.qty}. Raise stock in Stock & prices first.`, 'bad'); btn.disabled = false; return; }
+                            return commitStock(o.items, TOKEN, [{ update: { name: `${FS_ROOT()}/orders/${id}`, fields: { status: { stringValue: 'confirmed' } } }, updateMask: { fieldPaths: ['status'] }, currentDocument: { exists: true } }])
+                                .then(res => { say($a('agmsg'), res.ok ? `${id} confirmed — stock updated ✓` : 'Refused: ' + res.error, res.ok ? 'ok' : 'bad'); if (res.ok) { loadOrders(); list(); } else btn.disabled = false; });
+                        });
+                    }).catch(() => { say($a('agmsg'), 'Network error', 'bad'); btn.disabled = false; });
             }
             const check = () => { if (location.hash === '#admin') open(); };
             window.addEventListener('hashchange', check); check();
